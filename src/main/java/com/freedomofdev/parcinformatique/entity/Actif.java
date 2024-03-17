@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Date;
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
 @Entity(name = "actifs")
 @Data
 @NoArgsConstructor

@@ -1,9 +1,5 @@
 package com.freedomofdev.parcinformatique.payload.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 public class MessageResponse {
     private String message;
 

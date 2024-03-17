@@ -2,9 +2,6 @@ package com.freedomofdev.parcinformatique.entity;
 
 import com.freedomofdev.parcinformatique.enums.AppRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "roles")

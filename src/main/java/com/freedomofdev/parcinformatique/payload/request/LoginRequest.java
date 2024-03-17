@@ -1,7 +1,6 @@
 package com.freedomofdev.parcinformatique.payload.request;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
 
 public class LoginRequest {
     @NotBlank
