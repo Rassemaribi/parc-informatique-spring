@@ -41,6 +41,11 @@ public class ActifService {
     }
 
     @Transactional
+    public List<Actif> createActifs(List<Actif> actifs) {
+        return actifRepository.saveAll(actifs);
+    }
+
+    @Transactional
     public void deleteActif(Long id) {
         actifRepository.deleteById(id);
     }

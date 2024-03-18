@@ -1,6 +1,5 @@
 # parc-informatique-spring
 
-
 ## Requirements
 
 For building and running the application you need:
@@ -23,6 +22,7 @@ After running the application, you'll need to execute the following SQL commands
 INSERT INTO roles(name) VALUES('ROLE_COLLABORATEUR');
 INSERT INTO roles(name) VALUES('ROLE_DSI');
 ```
+
 ## Signing Up a User with ROLE_COLLABORATEUR
 
 Use application register interface to sign up a user with the ROLE_COLLABORATEUR (by default).
@@ -36,6 +36,7 @@ To sign up a user with the ROLE_DSI using Postman, follow these steps:
 2. Send a POST request to the following URL: http://localhost:8090/api/auth/signup
 
 3. In the request body, provide the following JSON payload:
+
 ```json
 {
     "username": "dsi",

@@ -21,6 +21,12 @@ public class ActifController {
         this.actifService = actifService;
     }
 
+    @PostMapping("/batch")
+    public ResponseEntity<List<Actif>> createActifs(@RequestBody List<Actif> actifs) {
+        List<Actif> createdActifs = actifService.createActifs(actifs);
+        return new ResponseEntity<>(createdActifs, HttpStatus.CREATED);
+    }
+
     @GetMapping
     public ResponseEntity<List<Actif>> getAllActifs() {
         List<Actif> actifs = actifService.getAllActifs();
