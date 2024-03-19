@@ -1,5 +1,8 @@
 package com.freedomofdev.parcinformatique.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.freedomofdev.parcinformatique.enums.Etat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
 @Entity(name = "actifs")
@@ -36,11 +41,17 @@ public class Actif {
     private Date dateAchat;
     private boolean partage;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "assigned_user_id")
     private User assignedUser;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "dsi_id")
     private User createdByDSI;
+
+    @JsonManagedReference(value = "actif-reference")
+    @OneToMany(mappedBy = "actif", cascade = CascadeType.ALL)
+    private List<DemandeReparation> demandesReparation = new ArrayList<>();
 }

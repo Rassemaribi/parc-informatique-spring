@@ -1,7 +1,6 @@
 package com.freedomofdev.parcinformatique.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,15 +18,15 @@ public class DemandeAcquisition {
     @Column(name = "demande_description")
     private String demandeDescription;
 
+    @JsonBackReference(value = "requestedByAcquisition-reference")
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "requested_by_user_id")
-    private User requestedBy;
+    private User acquisitionRequestedBy;
 
+    @JsonBackReference(value = "handledByAcquisition-reference")
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "responded_by_user_id")
-    private User handledBy;
+    private User acquisitionHandledBy;
 
     @Column(name = "rejection_reason")
     private String rejectionReason;

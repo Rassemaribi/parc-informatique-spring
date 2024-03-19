@@ -1,18 +1,19 @@
 package com.freedomofdev.parcinformatique.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@ToString
 @Data
 @Entity
 @Table(name = "users",
@@ -39,24 +40,29 @@ public class User {
     @Size(max = 120)
     private String password;
 
-    @OneToMany(mappedBy = "assignedUser")
+    @JsonIdentityReference(alwaysAsId = true)
+    @OneToMany(mappedBy = "assignedUser", cascade = CascadeType.ALL)
     private List<Actif> assignedActifs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "requestedBy")
-    @JsonManagedReference
+    @JsonIdentityReference(alwaysAsId = true)
+    @OneToMany(mappedBy = "createdByDSI", cascade = CascadeType.ALL)
+    private List<Actif> createdActifs = new ArrayList<>();
+
+    @JsonManagedReference(value = "requestedByAcquisition-reference")
+    @OneToMany(mappedBy = "acquisitionRequestedBy")
     private List<DemandeAcquisition> demandesAcquisitionCollaborateur = new ArrayList<>();
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "handledBy")
+    @JsonManagedReference(value = "handledByAcquisition-reference")
+    @OneToMany(mappedBy = "acquisitionHandledBy")
     private List<DemandeAcquisition> demandesAcquisitionDSI = new ArrayList<>();
 
-    @OneToMany(mappedBy = "requestedBy")
-    @JsonManagedReference
-    private List<DemandeReparation> demandesReparationCollaborateur = new ArrayList<>();
+    @JsonManagedReference(value = "requestedByReparation-reference")
+    @OneToMany(mappedBy = "reparationRequestedBy")
+    private List<DemandeReparation> demandesReparationCollaborateur;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "handledBy")
-    private List<DemandeReparation> demandesReparationDSI = new ArrayList<>();
+    @JsonManagedReference(value = "handledByReparation-reference")
+    @OneToMany(mappedBy = "reparationHandledBy")
+    private List<DemandeReparation> demandesReparationDSI;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",

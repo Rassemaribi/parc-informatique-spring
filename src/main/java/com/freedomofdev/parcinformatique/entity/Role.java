@@ -2,7 +2,9 @@ package com.freedomofdev.parcinformatique.entity;
 
 import com.freedomofdev.parcinformatique.enums.AppRole;
 import jakarta.persistence.*;
+import lombok.ToString;
 
+@ToString
 @Entity
 @Table(name = "roles")
 public class Role {

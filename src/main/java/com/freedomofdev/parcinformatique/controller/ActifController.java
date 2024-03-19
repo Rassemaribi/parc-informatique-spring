@@ -5,6 +5,7 @@ import com.freedomofdev.parcinformatique.service.ActifService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,18 +22,21 @@ public class ActifController {
         this.actifService = actifService;
     }
 
+    @PreAuthorize("hasRole('DSI')")
     @PostMapping("/batch")
-    public ResponseEntity<List<Actif>> createActifs(@RequestBody List<Actif> actifs) {
-        List<Actif> createdActifs = actifService.createActifs(actifs);
+    public ResponseEntity<List<Actif>> createActifs(@RequestBody List<Actif> actifs, @RequestParam Long id) {
+        List<Actif> createdActifs = actifService.createActifs(actifs, id);
         return new ResponseEntity<>(createdActifs, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('DSI')")
     @GetMapping
     public ResponseEntity<List<Actif>> getAllActifs() {
         List<Actif> actifs = actifService.getAllActifs();
         return new ResponseEntity<>(actifs, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('DSI')")
     @GetMapping("/{id}")
     public ResponseEntity<Actif> getActifById(@PathVariable Long id) {
         Actif actif = actifService.getActifById(id);
@@ -43,12 +47,15 @@ public class ActifController {
         }
     }
 
+    /* no longer used (all go to /batch)
+    @PreAuthorize("hasRole('DSI')")
     @PostMapping
-    public ResponseEntity<Actif> createActif(@RequestBody Actif actif) {
-        Actif createdActif = actifService.createActif(actif);
+    public ResponseEntity<Actif> createActif(@RequestBody Actif actif, @RequestParam Long userId) {
+        Actif createdActif = actifService.createActif(actif, userId);
         return new ResponseEntity<>(createdActif, HttpStatus.CREATED);
     }
-
+     */
+    @PreAuthorize("hasRole('DSI')")
     @PutMapping("/{id}")
     public ResponseEntity<Actif> updateActif(@PathVariable Long id, @RequestBody Actif actif) {
         actif.setId(id);
@@ -60,6 +67,7 @@ public class ActifController {
         }
     }
 
+    @PreAuthorize("hasRole('DSI')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteActif(@PathVariable Long id) {
         actifService.deleteActif(id);

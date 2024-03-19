@@ -1,8 +1,11 @@
 package com.freedomofdev.parcinformatique.service;
 
 import com.freedomofdev.parcinformatique.entity.Actif;
+import com.freedomofdev.parcinformatique.entity.User;
 import com.freedomofdev.parcinformatique.repository.ActifRepository;
+import com.freedomofdev.parcinformatique.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,10 +16,12 @@ import java.util.Optional;
 public class ActifService {
 
     private final ActifRepository actifRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ActifService(ActifRepository actifRepository) {
+    public ActifService(ActifRepository actifRepository, UserRepository userRepository) {
         this.actifRepository = actifRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional(readOnly = true)
@@ -30,11 +35,25 @@ public class ActifService {
         return optionalActif.orElse(null);
     }
 
-    @Transactional
-    public Actif createActif(Actif actif) {
-        return actifRepository.save(actif);
+    public List<Actif> createActifs(List<Actif> actifs, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with id: " + userId));
+
+        actifs.forEach(actif -> actif.setCreatedByDSI(user));
+
+        return actifRepository.saveAll(actifs);
     }
 
+    /* no longer used (all go to /batch)
+    public Actif createActif(Actif actif, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with id: " + userId));
+
+        actif.setCreatedByDSI(user);
+
+        return actifRepository.save(actif);
+    }
+    */
     @Transactional
     public Actif updateActif(Actif actif) {
         return actifRepository.save(actif);

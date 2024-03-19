@@ -1,7 +1,6 @@
 package com.freedomofdev.parcinformatique.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.freedomofdev.parcinformatique.enums.StatusDemande;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,20 +21,20 @@ public class DemandeReparation {
     @Column(name = "demande_description")
     private String demandeDescription;
 
+    @JsonBackReference(value = "actif-reference")
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "actif_id")
     private Actif actif;
 
+    @JsonBackReference(value = "requestedByReparation-reference")
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "requested_by_user_id")
-    private User requestedBy;
+    private User reparationRequestedBy;
 
+    @JsonBackReference(value = "handledByReparation-reference")
     @ManyToOne
-    @JsonManagedReference
     @JoinColumn(name = "responded_by_user_id")
-    private User handledBy;
+    private User reparationHandledBy;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_request")
