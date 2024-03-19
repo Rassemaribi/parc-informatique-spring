@@ -1,15 +1,18 @@
 package com.freedomofdev.parcinformatique.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "users",
         uniqueConstraints = {
@@ -36,6 +39,22 @@ public class User {
 
     @OneToMany(mappedBy = "assignedUser")
     private List<Actif> assignedActifs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "requestedBy")
+    @JsonManagedReference
+    private List<DemandeAcquisition> demandesAcquisitionCollaborateur = new ArrayList<>();
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "handledBy")
+    private List<DemandeAcquisition> demandesAcquisitionDSI = new ArrayList<>();
+
+    @OneToMany(mappedBy = "requestedBy")
+    @JsonManagedReference
+    private List<DemandeReparation> demandesReparationCollaborateur = new ArrayList<>();
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "handledBy")
+    private List<DemandeReparation> demandesReparationDSI = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
