@@ -39,4 +39,8 @@ public class Actif {
     @ManyToOne
     @JoinColumn(name = "assigned_user_id")
     private User assignedUser;
+
+    @ManyToOne
+    @JoinColumn(name = "dsi_id")
+    private User createdByDSI;
 }
