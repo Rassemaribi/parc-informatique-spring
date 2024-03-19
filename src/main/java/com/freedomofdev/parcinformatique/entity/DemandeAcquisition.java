@@ -1,18 +1,15 @@
 package com.freedomofdev.parcinformatique.entity;
 
-import com.freedomofdev.parcinformatique.enums.StatusDemande;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
-@Entity(name = "demande_reparations")
+@Entity(name = "demande_acquisitions")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DemandeReparation {
+public class DemandeAcquisition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,14 +26,16 @@ public class DemandeReparation {
     @JoinColumn(name = "responded_by_user_id")
     private User respondedBy;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "date_request")
-    private Date dateRequest;
+    @Column(name = "request_reason")
+    private String requestReason;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "date_response")
-    private Date dateResponse;
+    @Column(name = "rejection_reason")
+    private String rejectionReason;
 
     @Enumerated(EnumType.STRING)
-    private StatusDemande status;
+    private Status status;
+
+    public enum Status {
+        CREATED, ACCEPTED, REJECTED
+    }
 }
