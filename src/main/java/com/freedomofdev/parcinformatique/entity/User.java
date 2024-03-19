@@ -1,5 +1,6 @@
 package com.freedomofdev.parcinformatique.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -34,6 +35,7 @@ public class User {
     private String email;
 
     @NotBlank
+    @JsonIgnore
     @Size(max = 120)
     private String password;
 
