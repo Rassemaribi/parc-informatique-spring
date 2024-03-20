@@ -31,7 +31,7 @@ public class DemandeReparationService {
         return demandeReparationRepository.save(demandeReparation);
     }
 
-    public List<DemandeReparation> getAllDemandeReparations() {
-        return demandeReparationRepository.findAll();
+    public List<DemandeReparation> getDemandesReparationsById(Long userId) {
+        return demandeReparationRepository.findByReparationRequestedBy_Id(userId);
     }
 }

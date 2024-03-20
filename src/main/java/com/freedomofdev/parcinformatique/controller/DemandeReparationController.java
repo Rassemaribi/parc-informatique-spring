@@ -32,10 +32,10 @@ public class DemandeReparationController {
         return new ResponseEntity<>(updatedDemandeReparation, HttpStatus.OK);
     }
 
-    @GetMapping
     @PreAuthorize("hasRole('DSI')")
-    public ResponseEntity<List<DemandeReparation>> getAllDemandeReparations() {
-        List<DemandeReparation> demandeReparations = demandeReparationService.getAllDemandeReparations();
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<DemandeReparation>> getDemandesReparationsById(@PathVariable Long userId) {
+        List<DemandeReparation> demandeReparations = demandeReparationService.getDemandesReparationsById(userId);
         return new ResponseEntity<>(demandeReparations, HttpStatus.OK);
     }
 }
