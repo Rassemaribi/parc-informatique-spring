@@ -17,14 +17,14 @@ public class DemandeReparationController {
     @Autowired
     private DemandeReparationService demandeReparationService;
 
-    @PreAuthorize("hasRole('COLLABORATEUR')")
+    @PreAuthorize("hasRole('COLLABORATEUR') OR hasRole('DSI')")
     @PostMapping
     public ResponseEntity<DemandeReparation> createDemandeReparation(@RequestBody DemandeReparation demandeReparation) {
         DemandeReparation createdDemandeReparation = demandeReparationService.createDemandeReparation(demandeReparation);
         return new ResponseEntity<>(createdDemandeReparation, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('COLLABORATEUR')")
+    @PreAuthorize("hasRole('COLLABORATEUR') OR hasRole('DSI')")
     @PutMapping("/{id}")
     public ResponseEntity<DemandeReparation> updateDemandeReparation(@PathVariable Long id, @RequestBody DemandeReparation demandeReparation) {
         demandeReparation.setId(id);
