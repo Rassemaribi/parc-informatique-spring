@@ -19,8 +19,8 @@ public class DemandeReparationController {
 
     @PreAuthorize("hasRole('COLLABORATEUR')")
     @PostMapping
-    public ResponseEntity<DemandeReparation> createDemandeReparation(@RequestBody DemandeReparation demandeReparation, @RequestParam Long userId) {
-        DemandeReparation createdDemandeReparation = demandeReparationService.createDemandeReparation(demandeReparation, userId);
+    public ResponseEntity<DemandeReparation> createDemandeReparation(@RequestBody DemandeReparation demandeReparation) {
+        DemandeReparation createdDemandeReparation = demandeReparationService.createDemandeReparation(demandeReparation);
         return new ResponseEntity<>(createdDemandeReparation, HttpStatus.CREATED);
     }
 
@@ -32,10 +32,10 @@ public class DemandeReparationController {
         return new ResponseEntity<>(updatedDemandeReparation, HttpStatus.OK);
     }
 
+    @GetMapping
     @PreAuthorize("hasRole('DSI')")
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<DemandeReparation>> getDemandesReparationsById(@PathVariable Long userId) {
-        List<DemandeReparation> demandeReparations = demandeReparationService.getDemandesReparationsById(userId);
+    public ResponseEntity<List<DemandeReparation>> getAllDemandeReparations() {
+        List<DemandeReparation> demandeReparations = demandeReparationService.getAllDemandeReparations();
         return new ResponseEntity<>(demandeReparations, HttpStatus.OK);
     }
 }
