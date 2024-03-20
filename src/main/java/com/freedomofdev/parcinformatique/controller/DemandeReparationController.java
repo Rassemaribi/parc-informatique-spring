@@ -19,8 +19,8 @@ public class DemandeReparationController {
 
     @PreAuthorize("hasRole('COLLABORATEUR')")
     @PostMapping
-    public ResponseEntity<DemandeReparation> createDemandeReparation(@RequestBody DemandeReparation demandeReparation) {
-        DemandeReparation createdDemandeReparation = demandeReparationService.createDemandeReparation(demandeReparation);
+    public ResponseEntity<DemandeReparation> createDemandeReparation(@RequestBody DemandeReparation demandeReparation, @RequestParam Long userId) {
+        DemandeReparation createdDemandeReparation = demandeReparationService.createDemandeReparation(demandeReparation, userId);
         return new ResponseEntity<>(createdDemandeReparation, HttpStatus.CREATED);
     }
 
