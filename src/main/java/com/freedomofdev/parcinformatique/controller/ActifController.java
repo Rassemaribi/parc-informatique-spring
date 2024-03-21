@@ -47,18 +47,11 @@ public class ActifController {
         }
     }
 
-    /* no longer used (all go to /batch)
-    @PreAuthorize("hasRole('DSI')")
-    @PostMapping
-    public ResponseEntity<Actif> createActif(@RequestBody Actif actif, @RequestParam Long userId) {
-        Actif createdActif = actifService.createActif(actif, userId);
-        return new ResponseEntity<>(createdActif, HttpStatus.CREATED);
-    }
-     */
     @PreAuthorize("hasRole('DSI')")
     @PutMapping("/{id}")
     public ResponseEntity<Actif> updateActif(@PathVariable Long id, @RequestBody Actif actif) {
         actif.setId(id);
+        actif.setAssignedUser(null); // Do not set the user property from the request body
         Actif updatedActif = actifService.updateActif(actif);
         if (updatedActif != null) {
             return new ResponseEntity<>(updatedActif, HttpStatus.OK);
@@ -74,4 +67,3 @@ public class ActifController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
-

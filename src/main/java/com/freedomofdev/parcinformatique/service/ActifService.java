@@ -1,9 +1,11 @@
 package com.freedomofdev.parcinformatique.service;
+import com.freedomofdev.parcinformatique.exception.ResourceNotFoundException;
 
 import com.freedomofdev.parcinformatique.entity.Actif;
 import com.freedomofdev.parcinformatique.entity.User;
 import com.freedomofdev.parcinformatique.repository.ActifRepository;
 import com.freedomofdev.parcinformatique.repository.UserRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -54,14 +56,16 @@ public class ActifService {
         return actifRepository.save(actif);
     }
     */
-    @Transactional
-    public Actif updateActif(Actif actif) {
-        return actifRepository.save(actif);
-    }
 
     @Transactional
-    public List<Actif> createActifs(List<Actif> actifs) {
-        return actifRepository.saveAll(actifs);
+    public Actif updateActif(Actif updatedActif) {
+        Actif existingActif = actifRepository.findById(updatedActif.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Actif", "id", updatedActif.getId()));
+
+        // Copy properties from updatedActif to existingActif, excluding the user property
+        BeanUtils.copyProperties(updatedActif, existingActif, "assignedUser");
+
+        return actifRepository.save(existingActif);
     }
 
     @Transactional
