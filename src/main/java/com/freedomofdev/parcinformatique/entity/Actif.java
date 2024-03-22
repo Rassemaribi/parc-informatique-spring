@@ -36,7 +36,7 @@ public class Actif {
     private String caracteristiques;
     private Etat etat;
     private String garantie;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_achat")
     private Date dateAchat;
     private boolean partage;

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity(name = "demandes_acquisition")
 @Data
 @NoArgsConstructor
@@ -30,6 +32,14 @@ public class DemandeAcquisition {
 
     @Column(name = "rejection_reason")
     private String rejectionReason;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date_request")
+    private Date dateRequest;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date_response")
+    private Date dateResponse;
 
     @Enumerated(EnumType.STRING)
     private Status status;

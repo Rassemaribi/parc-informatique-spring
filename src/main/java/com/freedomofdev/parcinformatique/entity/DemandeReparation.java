@@ -36,11 +36,11 @@ public class DemandeReparation {
     @JoinColumn(name = "responded_by_user_id")
     private User reparationHandledBy;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_request")
     private Date dateRequest;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_response")
     private Date dateResponse;
 

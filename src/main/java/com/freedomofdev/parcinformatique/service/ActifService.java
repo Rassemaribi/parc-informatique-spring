@@ -1,4 +1,5 @@
 package com.freedomofdev.parcinformatique.service;
+import com.freedomofdev.parcinformatique.enums.Etat;
 import com.freedomofdev.parcinformatique.exception.ResourceNotFoundException;
 
 import com.freedomofdev.parcinformatique.entity.Actif;
@@ -69,7 +70,12 @@ public class ActifService {
     }
 
     @Transactional
-    public void deleteActif(Long id) {
-        actifRepository.deleteById(id);
+    public Actif archiveActif(Long id) {
+        Actif existingActif = actifRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Actif", "id", id));
+
+        existingActif.setEtat(Etat.ARCHIVE);
+
+        return actifRepository.save(existingActif);
     }
 }

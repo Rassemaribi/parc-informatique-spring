@@ -61,9 +61,9 @@ public class ActifController {
     }
 
     @PreAuthorize("hasRole('DSI')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteActif(@PathVariable Long id) {
-        actifService.deleteActif(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @PutMapping("/archive/{id}")
+    public ResponseEntity<Actif> archiveActif(@PathVariable Long id) {
+        Actif archivedActif = actifService.archiveActif(id);
+        return new ResponseEntity<>(archivedActif, HttpStatus.OK);
     }
 }
