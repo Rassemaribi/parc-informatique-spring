@@ -74,6 +74,7 @@ public class ActifService {
         Actif existingActif = actifRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Actif", "id", id));
 
+        existingActif.setAssignedUser(null); // Unassign the Actif from the user
         existingActif.setEtat(Etat.ARCHIVE);
 
         return actifRepository.save(existingActif);
