@@ -22,7 +22,7 @@ public class DemandeReparation {
     private String demandeDescription;
 
     @JsonBackReference(value = "actif-reference")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "actif_id")
     private Actif actif;
 
