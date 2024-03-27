@@ -26,6 +26,7 @@ public class Actif {
 
     private String nom;
     private String reference;
+    private String numeroSerie;
 
     @ManyToOne
     @JoinColumn(name = "categorie_id")
