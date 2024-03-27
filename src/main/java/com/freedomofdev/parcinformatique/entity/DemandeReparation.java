@@ -1,6 +1,9 @@
 package com.freedomofdev.parcinformatique.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.freedomofdev.parcinformatique.enums.StatusDemande;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,6 +16,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class DemandeReparation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +25,7 @@ public class DemandeReparation {
     @Column(name = "demande_description")
     private String demandeDescription;
 
-    @JsonBackReference(value = "actif-reference")
+    @JsonIdentityReference(alwaysAsId = true) // This annotation tells Jackson to serialize the actif field with its ID
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "actif_id")
     private Actif actif;
