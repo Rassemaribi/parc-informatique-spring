@@ -38,4 +38,11 @@ public class DemandeReparationController {
         List<DemandeReparation> demandeReparations = demandeReparationService.getAllDemandeReparations();
         return new ResponseEntity<>(demandeReparations, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('COLLABORATEUR') OR hasRole('DSI')")
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<List<DemandeReparation>> getDemandesReparationByUserId(@PathVariable Long userId) {
+        List<DemandeReparation> demandesReparation = demandeReparationService.getDemandesReparationByUserId(userId);
+        return ResponseEntity.ok(demandesReparation);
+    }
 }

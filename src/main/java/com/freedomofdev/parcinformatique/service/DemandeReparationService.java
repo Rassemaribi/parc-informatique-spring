@@ -32,4 +32,8 @@ public class DemandeReparationService {
     public List<DemandeReparation> getAllDemandeReparations() {
         return demandeReparationRepository.findAll();
     }
+
+    public List<DemandeReparation> getDemandesReparationByUserId(Long userId) {
+        return demandeReparationRepository.findByReparationRequestedBy_Id(userId);
+    }
 }

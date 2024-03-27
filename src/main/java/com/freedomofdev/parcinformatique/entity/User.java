@@ -57,7 +57,7 @@ public class User {
     private List<DemandeAcquisition> demandesAcquisitionDSI = new ArrayList<>();
 
     @JsonManagedReference(value = "requestedByReparation-reference")
-    @OneToMany(mappedBy = "reparationRequestedBy")
+    @OneToMany(mappedBy = "reparationRequestedBy", fetch = FetchType.EAGER)
     private List<DemandeReparation> demandesReparationCollaborateur;
 
     @JsonManagedReference(value = "handledByReparation-reference")

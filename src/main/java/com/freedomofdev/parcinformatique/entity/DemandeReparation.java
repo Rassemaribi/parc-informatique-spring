@@ -25,7 +25,7 @@ public class DemandeReparation {
     @Column(name = "demande_description")
     private String demandeDescription;
 
-    @JsonIdentityReference(alwaysAsId = true) // This annotation tells Jackson to serialize the actif field with its ID
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "actif_id")
     private Actif actif;
