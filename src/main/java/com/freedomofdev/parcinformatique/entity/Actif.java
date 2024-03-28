@@ -52,7 +52,7 @@ public class Actif {
     @JoinColumn(name = "dsi_id")
     private User createdByDSI;
 
-    @JsonManagedReference(value = "actif-reference")
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "actif", cascade = CascadeType.ALL)
     private List<DemandeReparation> demandesReparation = new ArrayList<>();
 }
