@@ -11,6 +11,7 @@ import com.freedomofdev.parcinformatique.repository.RoleRepository;
 import com.freedomofdev.parcinformatique.repository.UserRepository;
 import com.freedomofdev.parcinformatique.security.jwt.JwtUtils;
 import com.freedomofdev.parcinformatique.security.services.UserDetailsImpl;
+import com.freedomofdev.parcinformatique.service.MailService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -46,6 +47,9 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    private MailService mailService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -111,7 +115,7 @@ public class AuthController {
 
         user.setRoles(roles);
         userRepository.save(user);
-
+        mailService.sendConfirmationEmail(user.getEmail(), "Confirmation Email", "Thank you for signing up!");
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
