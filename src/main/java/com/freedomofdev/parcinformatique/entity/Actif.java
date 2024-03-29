@@ -34,7 +34,7 @@ public class Actif {
 
     private String marque;
     private String modele;
-    private String commentaires;
+    private String caracteristiques;
     private Etat etat;
     private String garantie;
     @Temporal(TemporalType.DATE)
