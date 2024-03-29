@@ -25,6 +25,9 @@ public class DemandeReparation {
     @Column(name = "demande_description")
     private String demandeDescription;
 
+    @Column(name = "rejet_motif")
+    private String motifRejet;
+
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     @JoinColumn(name = "actif_id")
