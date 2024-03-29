@@ -41,7 +41,7 @@ public class Actif {
     private String commentaires;
     @Column(nullable = false)
     private Etat etat;
-    private Long garantie;
+    private String garantie;
     @Temporal(TemporalType.DATE)
     @Column(name = "date_achat", nullable = false)
     private Date dateAchat;
