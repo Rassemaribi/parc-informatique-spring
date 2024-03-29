@@ -35,6 +35,11 @@ public class DemandeReparationService {
                     existingDemandeReparation.setStatus(newDemandeReparation.getStatus());
                     existingDemandeReparation.setDateResponse(newDemandeReparation.getDateResponse());
 
+                    // Check if motifRejet is present in newDemandeReparation
+                    if (newDemandeReparation.getMotifRejet() != null) {
+                        existingDemandeReparation.setMotifRejet(newDemandeReparation.getMotifRejet());
+                    }
+
                     // Fetch the User from the UserRepository using the provided userId
                     User handledByUser = userRepository.findById(userId)
                             .orElseThrow(() -> new RuntimeException("Error: User is not found."));
