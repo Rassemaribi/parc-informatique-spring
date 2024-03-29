@@ -32,12 +32,13 @@ public class ActifService {
         return actifRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Actif getActifById(Long id) {
         Optional<Actif> optionalActif = actifRepository.findById(id);
         return optionalActif.orElse(null);
     }
 
+    @Transactional
     public List<Actif> createActifs(List<Actif> actifs, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with id: " + userId));

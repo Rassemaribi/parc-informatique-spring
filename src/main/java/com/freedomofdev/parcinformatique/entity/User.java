@@ -57,14 +57,14 @@ public class User {
     private List<DemandeAcquisition> demandesAcquisitionDSI = new ArrayList<>();
 
     @JsonManagedReference(value = "requestedByReparation-reference")
-    @OneToMany(mappedBy = "reparationRequestedBy", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "reparationRequestedBy")
     private List<DemandeReparation> demandesReparationCollaborateur;
 
     @JsonManagedReference(value = "handledByReparation-reference")
     @OneToMany(mappedBy = "reparationHandledBy")
     private List<DemandeReparation> demandesReparationDSI;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -77,6 +77,14 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                '}';
     }
 
     public Long getId() {

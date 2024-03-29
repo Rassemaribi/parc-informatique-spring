@@ -59,6 +59,11 @@ public class JwtUtils {
     }
 
     public boolean validateJwtToken(String authToken) {
+        if (authToken == null || authToken.isEmpty()) {
+            logger.error("JWT string is null or empty");
+            return false;
+        }
+
         try {
             Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
             return true;

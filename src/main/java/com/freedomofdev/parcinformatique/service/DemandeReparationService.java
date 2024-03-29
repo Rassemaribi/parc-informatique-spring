@@ -2,6 +2,7 @@ package com.freedomofdev.parcinformatique.service;
 
 import com.freedomofdev.parcinformatique.entity.Actif;
 import com.freedomofdev.parcinformatique.entity.DemandeReparation;
+import com.freedomofdev.parcinformatique.entity.User;
 import com.freedomofdev.parcinformatique.repository.ActifRepository;
 import com.freedomofdev.parcinformatique.repository.DemandeReparationRepository;
 import com.freedomofdev.parcinformatique.repository.UserRepository;
@@ -17,6 +18,9 @@ public class DemandeReparationService {
 
     @Autowired
     private ActifRepository actifRepository;
+
+    @Autowired
+    private UserRepository userRepository;
     public DemandeReparation createDemandeReparation(DemandeReparation demandeReparation) {
         Long actifId = demandeReparation.getActif().getId();
         Actif actif = actifRepository.findById(actifId)
@@ -25,8 +29,21 @@ public class DemandeReparationService {
         return demandeReparationRepository.save(demandeReparation);
     }
 
-    public DemandeReparation updateDemandeReparation(DemandeReparation demandeReparation) {
-        return demandeReparationRepository.save(demandeReparation);
+    public DemandeReparation updateDemandeReparation(Long id, DemandeReparation newDemandeReparation, Long userId) {
+        return demandeReparationRepository.findById(id)
+                .map(existingDemandeReparation -> {
+                    existingDemandeReparation.setStatus(newDemandeReparation.getStatus());
+                    existingDemandeReparation.setDateResponse(newDemandeReparation.getDateResponse());
+
+                    // Fetch the User from the UserRepository using the provided userId
+                    User handledByUser = userRepository.findById(userId)
+                            .orElseThrow(() -> new RuntimeException("Error: User is not found."));
+                    System.out.println("handledByUser: " + handledByUser);
+
+                    existingDemandeReparation.setReparationHandledBy(handledByUser);
+                    return demandeReparationRepository.save(existingDemandeReparation);
+                })
+                .orElseThrow(() -> new RuntimeException("Error: DemandeReparation is not found."));
     }
 
     public List<DemandeReparation> getAllDemandeReparations() {

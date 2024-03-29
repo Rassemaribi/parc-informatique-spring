@@ -24,7 +24,9 @@ public class Actif {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nom;
+    @Column(nullable = false)
     private String reference;
     private String numeroSerie;
 
@@ -32,14 +34,18 @@ public class Actif {
     @JoinColumn(name = "categorie_id")
     private Categorie categorie;
 
+    @Column(nullable = false)
     private String marque;
+    @Column(nullable = false)
     private String modele;
     private String commentaires;
+    @Column(nullable = false)
     private Etat etat;
-    private String garantie;
+    private Integer garantie;
     @Temporal(TemporalType.DATE)
-    @Column(name = "date_achat")
+    @Column(name = "date_achat", nullable = false)
     private Date dateAchat;
+    @Column(nullable = false)
     private boolean partage;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -53,6 +59,16 @@ public class Actif {
     private User createdByDSI;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "actif", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "actif", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<DemandeReparation> demandesReparation = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Actif{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", reference='" + reference + '\'' +
+                ", numeroSerie='" + numeroSerie + '\'' +
+                '}';
+    }
 }

@@ -26,7 +26,7 @@ public class DemandeReparation {
     private String demandeDescription;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "actif_id")
     private Actif actif;
 

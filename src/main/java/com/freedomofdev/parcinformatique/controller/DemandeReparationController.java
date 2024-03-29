@@ -24,11 +24,10 @@ public class DemandeReparationController {
         return new ResponseEntity<>(createdDemandeReparation, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('COLLABORATEUR') OR hasRole('DSI')")
+    @PreAuthorize("hasRole('DSI')")
     @PutMapping("/{id}")
-    public ResponseEntity<DemandeReparation> updateDemandeReparation(@PathVariable Long id, @RequestBody DemandeReparation demandeReparation) {
-        demandeReparation.setId(id);
-        DemandeReparation updatedDemandeReparation = demandeReparationService.updateDemandeReparation(demandeReparation);
+    public ResponseEntity<DemandeReparation> updateDemandeReparation(@PathVariable Long id, @RequestBody DemandeReparation demandeReparation, @RequestParam Long userId) {
+        DemandeReparation updatedDemandeReparation = demandeReparationService.updateDemandeReparation(id, demandeReparation, userId);
         return new ResponseEntity<>(updatedDemandeReparation, HttpStatus.OK);
     }
 
