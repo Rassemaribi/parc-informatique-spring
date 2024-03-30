@@ -3,6 +3,7 @@ package com.freedomofdev.parcinformatique.service;
 import com.freedomofdev.parcinformatique.entity.Actif;
 import com.freedomofdev.parcinformatique.entity.User;
 import com.freedomofdev.parcinformatique.enums.Etat;
+import com.freedomofdev.parcinformatique.exception.BusinessException;
 import com.freedomofdev.parcinformatique.exception.ResourceNotFoundException;
 import com.freedomofdev.parcinformatique.repository.ActifRepository;
 import com.freedomofdev.parcinformatique.repository.UserRepository;
@@ -29,35 +30,32 @@ public class ActifService {
 
     @Transactional(readOnly = true)
     public List<Actif> getAllActifs() {
-        return actifRepository.findAll();
+        List<Actif> actifs = actifRepository.findAll();
+        if (actifs == null || actifs.isEmpty()) {
+            throw new BusinessException("Pas d'actifs trouvés");
+        }
+        return actifs;
     }
 
     @Transactional
     public Actif getActifById(Long id) {
         Optional<Actif> optionalActif = actifRepository.findById(id);
-        return optionalActif.orElse(null);
+        return optionalActif.orElseThrow(() -> new BusinessException("Pas d'actif avec id: " + id));
     }
 
     @Transactional
     public List<Actif> createActifs(List<Actif> actifs, Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with id: " + userId));
+                .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé avec id: " + userId));
 
         actifs.forEach(actif -> actif.setCreatedByDSI(user));
 
-        return actifRepository.saveAll(actifs);
+        List<Actif> createdActifs = actifRepository.saveAll(actifs);
+        if (createdActifs == null || createdActifs.isEmpty()) {
+            throw new BusinessException("Problème lors de la création des actifs");
+        }
+        return createdActifs;
     }
-
-    /* no longer used (all go to /batch)
-    public Actif createActif(Actif actif, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with id: " + userId));
-
-        actif.setCreatedByDSI(user);
-
-        return actifRepository.save(actif);
-    }
-    */
 
     @Transactional
     public Actif updateActif(Actif updatedActif) {
@@ -67,7 +65,11 @@ public class ActifService {
         // Copy properties from updatedActif to existingActif, excluding the user property
         BeanUtils.copyProperties(updatedActif, existingActif, "assignedUser");
 
-        return actifRepository.save(existingActif);
+        Actif savedActif = actifRepository.save(existingActif);
+        if (savedActif == null) {
+            throw new BusinessException("Problème lors de l'update de l'actif avec l'id: " + updatedActif.getId());
+        }
+        return savedActif;
     }
 
     @Transactional
@@ -75,9 +77,13 @@ public class ActifService {
         Actif existingActif = actifRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Actif", "id", id));
 
-        existingActif.setAssignedUser(null); // Unassign the Actif from the user
+        existingActif.setAssignedUser(null);
         existingActif.setEtat(Etat.ARCHIVE);
 
-        return actifRepository.save(existingActif);
+        Actif archivedActif = actifRepository.save(existingActif);
+        if (archivedActif == null) {
+            throw new BusinessException("Problème lors de l'archivage de l'actif: " + id);
+        }
+        return archivedActif;
     }
 }

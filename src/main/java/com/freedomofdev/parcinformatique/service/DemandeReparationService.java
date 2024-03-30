@@ -3,6 +3,8 @@ package com.freedomofdev.parcinformatique.service;
 import com.freedomofdev.parcinformatique.entity.Actif;
 import com.freedomofdev.parcinformatique.entity.DemandeReparation;
 import com.freedomofdev.parcinformatique.entity.User;
+import com.freedomofdev.parcinformatique.exception.BusinessException;
+import com.freedomofdev.parcinformatique.exception.ResourceNotFoundException;
 import com.freedomofdev.parcinformatique.repository.ActifRepository;
 import com.freedomofdev.parcinformatique.repository.DemandeReparationRepository;
 import com.freedomofdev.parcinformatique.repository.UserRepository;
@@ -13,21 +15,29 @@ import java.util.List;
 
 @Service
 public class DemandeReparationService {
-    @Autowired
-    private DemandeReparationRepository demandeReparationRepository;
+    private final DemandeReparationRepository demandeReparationRepository;
+    private final ActifRepository actifRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private ActifRepository actifRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    public DemandeReparationService(DemandeReparationRepository demandeReparationRepository,
+                                    ActifRepository actifRepository,
+                                    UserRepository userRepository) {
+        this.demandeReparationRepository = demandeReparationRepository;
+        this.actifRepository = actifRepository;
+        this.userRepository = userRepository;
+    }
 
     public DemandeReparation createDemandeReparation(DemandeReparation demandeReparation) {
         Long actifId = demandeReparation.getActif().getId();
         Actif actif = actifRepository.findById(actifId)
-                .orElseThrow(() -> new RuntimeException("Error: Actif is not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Actif", "id", actifId));
         demandeReparation.setActif(actif);
-        return demandeReparationRepository.save(demandeReparation);
+        DemandeReparation createdDemandeReparation = demandeReparationRepository.save(demandeReparation);
+        if (createdDemandeReparation == null) {
+            throw new BusinessException("Problème lors de la création de la demande");
+        }
+        return createdDemandeReparation;
     }
 
     public DemandeReparation updateDemandeReparation(Long id, DemandeReparation newDemandeReparation, Long userId) {
@@ -43,20 +53,32 @@ public class DemandeReparationService {
 
                     // Fetch the User from the UserRepository using the provided userId
                     User handledByUser = userRepository.findById(userId)
-                            .orElseThrow(() -> new RuntimeException("Error: User is not found."));
+                            .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
                     System.out.println("handledByUser: " + handledByUser);
 
                     existingDemandeReparation.setReparationHandledBy(handledByUser);
-                    return demandeReparationRepository.save(existingDemandeReparation);
+                    DemandeReparation updatedDemandeReparation = demandeReparationRepository.save(existingDemandeReparation);
+                    if (updatedDemandeReparation == null) {
+                        throw new BusinessException("Problème lors de l'update de la demande avec l'id: " + id);
+                    }
+                    return updatedDemandeReparation;
                 })
-                .orElseThrow(() -> new RuntimeException("Error: DemandeReparation is not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("DemandeReparation", "id", id));
     }
 
     public List<DemandeReparation> getAllDemandeReparations() {
-        return demandeReparationRepository.findAll();
+        List<DemandeReparation> demandeReparations = demandeReparationRepository.findAll();
+        if (demandeReparations == null || demandeReparations.isEmpty()) {
+            throw new BusinessException("Il n'y a pas de demandes de réparation trouvées");
+        }
+        return demandeReparations;
     }
 
     public List<DemandeReparation> getDemandesReparationByUserId(Long userId) {
-        return demandeReparationRepository.findByReparationRequestedBy_Id(userId);
+        List<DemandeReparation> demandesReparation = demandeReparationRepository.findByReparationRequestedBy_Id(userId);
+        if (demandesReparation == null || demandesReparation.isEmpty()) {
+            throw new BusinessException("Pas de demandes de réparation pour cet utilisateur d'id: " + userId);
+        }
+        return demandesReparation;
     }
 }

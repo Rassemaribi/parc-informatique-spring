@@ -33,11 +33,7 @@ public class CategorieController {
     @GetMapping("/{id}")
     public ResponseEntity<Categorie> getCategoryById(@PathVariable Long id) {
         Categorie categorie = categorieService.getCategoryById(id);
-        if (categorie != null) {
-            return new ResponseEntity<>(categorie, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(categorie, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('DSI')")
@@ -52,11 +48,7 @@ public class CategorieController {
     public ResponseEntity<Categorie> updateCategory(@PathVariable Long id, @RequestBody Categorie categorie) {
         categorie.setId(id);
         Categorie updatedCategorie = categorieService.updateCategory(categorie);
-        if (updatedCategorie != null) {
-            return new ResponseEntity<>(updatedCategorie, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(updatedCategorie, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('DSI')")
@@ -66,4 +58,3 @@ public class CategorieController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
-

@@ -40,11 +40,7 @@ public class ActifController {
     @GetMapping("/{id}")
     public ResponseEntity<Actif> getActifById(@PathVariable Long id) {
         Actif actif = actifService.getActifById(id);
-        if (actif != null) {
-            return new ResponseEntity<>(actif, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(actif, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('DSI')")
@@ -53,11 +49,7 @@ public class ActifController {
         actif.setId(id);
         actif.setAssignedUser(null); // Do not set the user property from the request body
         Actif updatedActif = actifService.updateActif(actif);
-        if (updatedActif != null) {
-            return new ResponseEntity<>(updatedActif, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(updatedActif, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('DSI')")
