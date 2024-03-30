@@ -21,6 +21,7 @@ public class DemandeReparationService {
 
     @Autowired
     private UserRepository userRepository;
+
     public DemandeReparation createDemandeReparation(DemandeReparation demandeReparation) {
         Long actifId = demandeReparation.getActif().getId();
         Actif actif = actifRepository.findById(actifId)

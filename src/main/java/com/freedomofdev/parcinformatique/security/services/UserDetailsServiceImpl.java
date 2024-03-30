@@ -18,6 +18,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private ActifRepository actifRepository;
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -30,6 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
+
     public void assignActifToUser(Long userId, Long actifId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Error: User is not found."));

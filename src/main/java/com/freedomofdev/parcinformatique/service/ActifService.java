@@ -1,9 +1,9 @@
 package com.freedomofdev.parcinformatique.service;
-import com.freedomofdev.parcinformatique.enums.Etat;
-import com.freedomofdev.parcinformatique.exception.ResourceNotFoundException;
 
 import com.freedomofdev.parcinformatique.entity.Actif;
 import com.freedomofdev.parcinformatique.entity.User;
+import com.freedomofdev.parcinformatique.enums.Etat;
+import com.freedomofdev.parcinformatique.exception.ResourceNotFoundException;
 import com.freedomofdev.parcinformatique.repository.ActifRepository;
 import com.freedomofdev.parcinformatique.repository.UserRepository;
 import org.springframework.beans.BeanUtils;

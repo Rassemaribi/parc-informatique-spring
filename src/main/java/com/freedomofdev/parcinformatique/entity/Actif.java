@@ -1,8 +1,6 @@
 package com.freedomofdev.parcinformatique.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.freedomofdev.parcinformatique.enums.Etat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

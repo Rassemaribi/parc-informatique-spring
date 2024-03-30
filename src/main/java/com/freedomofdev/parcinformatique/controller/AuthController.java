@@ -115,7 +115,7 @@ public class AuthController {
 
         user.setRoles(roles);
         userRepository.save(user);
-        mailService.sendConfirmationEmail(user.getEmail(), "Confirmation Email", "Thank you for signing up!");
+        mailService.sendConfirmationEmail(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
