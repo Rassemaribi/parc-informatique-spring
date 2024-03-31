@@ -25,10 +25,17 @@ public class DemandeReparationController {
     }
 
     @PreAuthorize("hasRole('DSI')")
-    @PutMapping("/{id}")
-    public ResponseEntity<DemandeReparation> updateDemandeReparation(@PathVariable Long id, @RequestBody DemandeReparation demandeReparation, @RequestParam Long userId) {
-        DemandeReparation updatedDemandeReparation = demandeReparationService.updateDemandeReparation(id, demandeReparation, userId);
-        return new ResponseEntity<>(updatedDemandeReparation, HttpStatus.OK);
+    @PutMapping("/accept/{id}")
+    public ResponseEntity<DemandeReparation> acceptDemandeReparation(@PathVariable Long id, @RequestParam Long userId) {
+        DemandeReparation acceptedDemandeReparation = demandeReparationService.acceptDemandeReparation(id, userId);
+        return ResponseEntity.ok(acceptedDemandeReparation);
+    }
+
+    @PreAuthorize("hasRole('DSI')")
+    @PutMapping("/reject/{id}")
+    public ResponseEntity<DemandeReparation> rejectDemandeReparation(@PathVariable Long id, @RequestParam String rejetMotif, @RequestParam Long userId) {
+        DemandeReparation rejectedDemandeReparation = demandeReparationService.rejectDemandeReparation(id, rejetMotif, userId);
+        return ResponseEntity.ok(rejectedDemandeReparation);
     }
 
     @GetMapping

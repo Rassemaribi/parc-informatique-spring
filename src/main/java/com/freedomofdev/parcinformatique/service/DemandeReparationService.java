@@ -10,7 +10,9 @@ import com.freedomofdev.parcinformatique.repository.DemandeReparationRepository;
 import com.freedomofdev.parcinformatique.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.freedomofdev.parcinformatique.enums.StatusDemande;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,6 +35,9 @@ public class DemandeReparationService {
         Actif actif = actifRepository.findById(actifId)
                 .orElseThrow(() -> new ResourceNotFoundException("Actif", "id", actifId));
         demandeReparation.setActif(actif);
+
+        demandeReparation.setStatus(StatusDemande.CREATED);
+
         DemandeReparation createdDemandeReparation = demandeReparationRepository.save(demandeReparation);
         if (createdDemandeReparation == null) {
             throw new BusinessException("Problème lors de la création de la demande");
@@ -40,16 +45,11 @@ public class DemandeReparationService {
         return createdDemandeReparation;
     }
 
-    public DemandeReparation updateDemandeReparation(Long id, DemandeReparation newDemandeReparation, Long userId) {
+    public DemandeReparation acceptDemandeReparation(Long id, Long userId) {
         return demandeReparationRepository.findById(id)
                 .map(existingDemandeReparation -> {
-                    existingDemandeReparation.setStatus(newDemandeReparation.getStatus());
-                    existingDemandeReparation.setDateResponse(newDemandeReparation.getDateResponse());
-
-                    // Check if motifRejet is present in newDemandeReparation
-                    if (newDemandeReparation.getMotifRejet() != null) {
-                        existingDemandeReparation.setMotifRejet(newDemandeReparation.getMotifRejet());
-                    }
+                    existingDemandeReparation.setStatus(StatusDemande.PENDING);
+                    existingDemandeReparation.setDateResponse(new Date());
 
                     // Fetch the User from the UserRepository using the provided userId
                     User handledByUser = userRepository.findById(userId)
@@ -59,7 +59,29 @@ public class DemandeReparationService {
                     existingDemandeReparation.setReparationHandledBy(handledByUser);
                     DemandeReparation updatedDemandeReparation = demandeReparationRepository.save(existingDemandeReparation);
                     if (updatedDemandeReparation == null) {
-                        throw new BusinessException("Problème lors de l'update de la demande avec l'id: " + id);
+                        throw new BusinessException("Problème lors de l'acceptation de la demande d'id: " + id);
+                    }
+                    return updatedDemandeReparation;
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("DemandeReparation", "id", id));
+    }
+
+    public DemandeReparation rejectDemandeReparation(Long id, String rejetMotif, Long userId) {
+        return demandeReparationRepository.findById(id)
+                .map(existingDemandeReparation -> {
+                    existingDemandeReparation.setStatus(StatusDemande.REFUSE);
+                    existingDemandeReparation.setDateResponse(new Date());
+                    existingDemandeReparation.setMotifRejet(rejetMotif);
+
+                    // Fetch the User from the UserRepository using the provided userId
+                    User handledByUser = userRepository.findById(userId)
+                            .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+                    System.out.println("handledByUser: " + handledByUser);
+
+                    existingDemandeReparation.setReparationHandledBy(handledByUser);
+                    DemandeReparation updatedDemandeReparation = demandeReparationRepository.save(existingDemandeReparation);
+                    if (updatedDemandeReparation == null) {
+                        throw new BusinessException("Problème lors du rejet de la demande  d'id: " + id);
                     }
                     return updatedDemandeReparation;
                 })
