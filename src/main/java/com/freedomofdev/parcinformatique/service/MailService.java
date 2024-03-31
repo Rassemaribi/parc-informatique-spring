@@ -1,5 +1,6 @@
 package com.freedomofdev.parcinformatique.service;
 
+import com.freedomofdev.parcinformatique.entity.DemandeReparation;
 import com.freedomofdev.parcinformatique.entity.User;
 import com.mailersend.sdk.Recipient;
 import com.mailersend.sdk.emails.Email;
@@ -18,6 +19,7 @@ public class MailService {
     @Value("${mail_domain}")
     private String mailDomain;
 
+    // confirmation email
     public void sendConfirmationEmail(User user) {
 
         Email email = new Email();
@@ -43,6 +45,55 @@ public class MailService {
             System.out.println(response.messageId);
         } catch (MailerSendException e) {
 
+            e.printStackTrace();
+        }
+    }
+
+    // acceptance email
+    public void sendAcceptanceEmail(User user, DemandeReparation demandeReparation ) {
+        Email email = new Email();
+
+        email.setFrom("Freedom Of Dev Services", mailDomain);
+
+        email.subject = "Votre demande de réparation a été acceptée";
+
+        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+
+        email.AddRecipient(recipient);
+        email.text = "Votre demande de réparation a été rejetée pour le motif suivant: " + demandeReparation.getMotifRejet();
+
+        MailerSend ms = new MailerSend();
+        ms.setToken(mailerSendApiKey);
+
+        try {
+            MailerSendResponse response = ms.emails().send(email);
+            System.out.println(response.messageId);
+        } catch (MailerSendException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // rejection email
+    public void sendRejectionEmail(User user, DemandeReparation demandeReparation) {
+        Email email = new Email();
+
+        email.setFrom("Freedom Of Dev Services", mailDomain);
+
+        email.subject = "Votre demande de réparation a été rejetée";
+
+        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+
+        email.AddRecipient(recipient);
+
+        email.text = "Votre demande de réparation a été rejetée pour le motif suivant: " + demandeReparation.getMotifRejet();
+
+        MailerSend ms = new MailerSend();
+        ms.setToken(mailerSendApiKey);
+
+        try {
+            MailerSendResponse response = ms.emails().send(email);
+            System.out.println(response.messageId);
+        } catch (MailerSendException e) {
             e.printStackTrace();
         }
     }

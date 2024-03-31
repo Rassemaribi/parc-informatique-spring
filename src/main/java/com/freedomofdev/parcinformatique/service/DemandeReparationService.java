@@ -22,6 +22,9 @@ public class DemandeReparationService {
     private final UserRepository userRepository;
 
     @Autowired
+    private MailService mailService;
+
+    @Autowired
     public DemandeReparationService(DemandeReparationRepository demandeReparationRepository,
                                     ActifRepository actifRepository,
                                     UserRepository userRepository) {
@@ -61,6 +64,10 @@ public class DemandeReparationService {
                     if (updatedDemandeReparation == null) {
                         throw new BusinessException("Problème lors de l'acceptation de la demande d'id: " + id);
                     }
+
+                    // Send acceptance email
+                    mailService.sendAcceptanceEmail(updatedDemandeReparation.getReparationRequestedBy(), updatedDemandeReparation);
+
                     return updatedDemandeReparation;
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("DemandeReparation", "id", id));
@@ -83,6 +90,10 @@ public class DemandeReparationService {
                     if (updatedDemandeReparation == null) {
                         throw new BusinessException("Problème lors du rejet de la demande  d'id: " + id);
                     }
+
+                    // Send rejection email
+                    mailService.sendRejectionEmail(updatedDemandeReparation.getReparationRequestedBy(), updatedDemandeReparation);
+
                     return updatedDemandeReparation;
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("DemandeReparation", "id", id));
