@@ -38,6 +38,20 @@ public class DemandeReparationController {
         return ResponseEntity.ok(rejectedDemandeReparation);
     }
 
+    @PreAuthorize("hasRole('DSI')")
+    @PutMapping("/finirSucces/{id}")
+    public ResponseEntity<DemandeReparation> finirReparationAvecSucces(@PathVariable Long id) {
+        DemandeReparation finishedDemandeReparation = demandeReparationService.finirReparationAvecSucces(id);
+        return ResponseEntity.ok(finishedDemandeReparation);
+    }
+
+    @PreAuthorize("hasRole('DSI')")
+    @PutMapping("/finirEchec/{id}")
+    public ResponseEntity<DemandeReparation> finirReparationAvecEchec(@PathVariable Long id) {
+        DemandeReparation finishedDemandeReparation = demandeReparationService.finirReparationAvecEchec(id);
+        return ResponseEntity.ok(finishedDemandeReparation);
+    }
+
     @GetMapping
     @PreAuthorize("hasRole('DSI')")
     public ResponseEntity<List<DemandeReparation>> getAllDemandeReparations() {

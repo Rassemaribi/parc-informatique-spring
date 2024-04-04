@@ -3,6 +3,8 @@ package com.freedomofdev.parcinformatique.service;
 import com.freedomofdev.parcinformatique.entity.Actif;
 import com.freedomofdev.parcinformatique.entity.DemandeReparation;
 import com.freedomofdev.parcinformatique.entity.User;
+import com.freedomofdev.parcinformatique.enums.Etat;
+import com.freedomofdev.parcinformatique.enums.StatusDemande;
 import com.freedomofdev.parcinformatique.exception.BusinessException;
 import com.freedomofdev.parcinformatique.exception.ResourceNotFoundException;
 import com.freedomofdev.parcinformatique.repository.ActifRepository;
@@ -10,7 +12,6 @@ import com.freedomofdev.parcinformatique.repository.DemandeReparationRepository;
 import com.freedomofdev.parcinformatique.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.freedomofdev.parcinformatique.enums.StatusDemande;
 
 import java.util.Date;
 import java.util.List;
@@ -39,6 +40,12 @@ public class DemandeReparationService {
                 .orElseThrow(() -> new ResourceNotFoundException("Actif", "id", actifId));
         demandeReparation.setActif(actif);
 
+        // Check if there is an active DemandeReparation for this Actif
+        List<DemandeReparation> activeDemandes = demandeReparationRepository.findByActifAndActive(actif, true);
+        if (!activeDemandes.isEmpty()) {
+            throw new BusinessException("Cet actif a déja une demande de réparation active");
+        }
+
         demandeReparation.setStatus(StatusDemande.CREATED);
 
         DemandeReparation createdDemandeReparation = demandeReparationRepository.save(demandeReparation);
@@ -60,6 +67,12 @@ public class DemandeReparationService {
                     System.out.println("handledByUser: " + handledByUser);
 
                     existingDemandeReparation.setReparationHandledBy(handledByUser);
+
+                    // Set the status of the Actif to EN_REPARATION
+                    Actif actif = existingDemandeReparation.getActif();
+                    actif.setEtat(Etat.EN_REPARATION);
+                    actifRepository.save(actif);
+
                     DemandeReparation updatedDemandeReparation = demandeReparationRepository.save(existingDemandeReparation);
                     if (updatedDemandeReparation == null) {
                         throw new BusinessException("Problème lors de l'acceptation de la demande d'id: " + id);
@@ -93,6 +106,55 @@ public class DemandeReparationService {
 
                     // Send rejection email
                     mailService.sendRejectionEmail(updatedDemandeReparation.getReparationRequestedBy(), updatedDemandeReparation);
+
+                    return updatedDemandeReparation;
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("DemandeReparation", "id", id));
+    }
+
+    public DemandeReparation finirReparationAvecSucces(Long id) {
+        return demandeReparationRepository.findById(id)
+                .map(existingDemandeReparation -> {
+                    if (existingDemandeReparation.getStatus() != StatusDemande.PENDING) {
+                        throw new BusinessException("La demande de réparation n'est pas en cours");
+                    }
+
+                    existingDemandeReparation.setStatus(StatusDemande.DONE);
+
+                    // Set the status of the Actif to ASSIGNED
+                    Actif actif = existingDemandeReparation.getActif();
+                    actif.setEtat(Etat.ASSIGNED);
+                    actifRepository.save(actif);
+
+                    DemandeReparation updatedDemandeReparation = demandeReparationRepository.save(existingDemandeReparation);
+                    if (updatedDemandeReparation == null) {
+                        throw new BusinessException("Problème lors de la finition de la demande de réparation d'id: " + id);
+                    }
+
+                    return updatedDemandeReparation;
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("DemandeReparation", "id", id));
+    }
+
+    public DemandeReparation finirReparationAvecEchec(Long id) {
+        return demandeReparationRepository.findById(id)
+                .map(existingDemandeReparation -> {
+                    if (existingDemandeReparation.getStatus() != StatusDemande.PENDING) {
+                        throw new BusinessException("La demande de réparation n'est pas en cours");
+                    }
+
+                    existingDemandeReparation.setStatus(StatusDemande.DONE);
+
+                    // Set the status of the Actif to EN_REBUT and assigned user to null
+                    Actif actif = existingDemandeReparation.getActif();
+                    actif.setEtat(Etat.EN_REBUT);
+                    actif.setAssignedUser(null);
+                    actifRepository.save(actif);
+
+                    DemandeReparation updatedDemandeReparation = demandeReparationRepository.save(existingDemandeReparation);
+                    if (updatedDemandeReparation == null) {
+                        throw new BusinessException("Problème lors de la finition de la demande de réparation d'id: " + id);
+                    }
 
                     return updatedDemandeReparation;
                 })

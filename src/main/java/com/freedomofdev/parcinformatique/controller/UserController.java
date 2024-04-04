@@ -27,7 +27,14 @@ public class UserController {
     @PostMapping("/{userId}/assignActif/{actifId}")
     public ResponseEntity<?> assignActifToUser(@PathVariable Long userId, @PathVariable Long actifId) {
         userService.assignActifToUser(userId, actifId);
-        return ResponseEntity.ok("Actif assigned successfully to user");
+        return ResponseEntity.ok("Actif assigné avec succès à l'utilisateur");
+    }
+
+    @PreAuthorize("hasRole('DSI')")
+    @DeleteMapping("/{userId}/removeActif/{actifId}")
+    public ResponseEntity<?> removeActifFromUser(@PathVariable Long userId, @PathVariable Long actifId) {
+        userService.removeActifFromUser(userId, actifId);
+        return ResponseEntity.ok("Actif retiré avec succès de l'utilisateur");
     }
 
 }

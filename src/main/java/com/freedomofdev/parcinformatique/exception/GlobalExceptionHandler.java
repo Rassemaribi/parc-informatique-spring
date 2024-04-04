@@ -1,4 +1,5 @@
 package com.freedomofdev.parcinformatique.exception;
+
 import com.mailersend.sdk.exceptions.MailerSendException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

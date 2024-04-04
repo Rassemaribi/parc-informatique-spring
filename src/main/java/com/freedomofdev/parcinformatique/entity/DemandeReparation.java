@@ -33,6 +33,9 @@ public class DemandeReparation {
     @JoinColumn(name = "actif_id")
     private Actif actif;
 
+    @Column(name = "active")
+    private Boolean active = false;
+
     @JsonBackReference(value = "requestedByReparation-reference")
     @ManyToOne
     @JoinColumn(name = "requested_by_user_id")
@@ -53,4 +56,17 @@ public class DemandeReparation {
 
     @Enumerated(EnumType.STRING)
     private StatusDemande status;
+
+    public void setStatus(StatusDemande status) {
+        this.status = status;
+        updateActiveStatus();
+    }
+
+    private void updateActiveStatus() {
+        if (status == StatusDemande.CREATED || status == StatusDemande.PENDING) {
+            active = true;
+        } else if (status == StatusDemande.DONE || status == StatusDemande.REFUSE) {
+            active = false;
+        }
+    }
 }

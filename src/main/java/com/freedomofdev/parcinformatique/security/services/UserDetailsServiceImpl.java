@@ -2,6 +2,7 @@ package com.freedomofdev.parcinformatique.security.services;
 
 import com.freedomofdev.parcinformatique.entity.Actif;
 import com.freedomofdev.parcinformatique.entity.User;
+import com.freedomofdev.parcinformatique.enums.Etat;
 import com.freedomofdev.parcinformatique.repository.ActifRepository;
 import com.freedomofdev.parcinformatique.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,41 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public void assignActifToUser(Long userId, Long actifId) {
         User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        Actif actif = actifRepository.findById(actifId)
+                .orElseThrow(() -> new RuntimeException("Actif non trouvé."));
+
+        // Check if the Actif is already assigned to a user
+        User oldUser = actif.getAssignedUser();
+        if (oldUser != null) {
+            oldUser.getAssignedActifs().remove(actif);
+            userRepository.save(oldUser);
+        }
+
+        user.getAssignedActifs().add(actif);
+        actif.setAssignedUser(user);
+
+        actif.setEtat(Etat.ASSIGNED);
+
+        // Save the new user and the Actif to the database
+        userRepository.save(user);
+        actifRepository.save(actif);
+    }
+
+    public void removeActifFromUser(Long userId, Long actifId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Error: User is not found."));
         Actif actif = actifRepository.findById(actifId)
                 .orElseThrow(() -> new RuntimeException("Error: Actif is not found."));
 
-        user.getAssignedActifs().add(actif);
-        actif.setAssignedUser(user);
+        if (!user.getAssignedActifs().contains(actif)) {
+            throw new RuntimeException("Error: Actif is not assigned to this user.");
+        }
+
+        user.getAssignedActifs().remove(actif);
+        actif.setAssignedUser(null);
+
         userRepository.save(user);
+        actifRepository.save(actif);
     }
 }
