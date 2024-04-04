@@ -65,7 +65,8 @@ public class ActifService {
         Actif existingActif = actifRepository.findById(updatedActif.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Actif", "id", updatedActif.getId()));
 
-        // Copy properties from updatedActif to existingActif, excluding the user property
+        updatedActif.setEtat(existingActif.getEtat());
+
         BeanUtils.copyProperties(updatedActif, existingActif, "assignedUser");
 
         Actif savedActif = actifRepository.save(existingActif);
