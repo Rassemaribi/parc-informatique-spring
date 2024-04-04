@@ -48,7 +48,10 @@ public class ActifService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé avec id: " + userId));
 
-        actifs.forEach(actif -> actif.setCreatedByDSI(user));
+        actifs.forEach(actif -> {
+            actif.setCreatedByDSI(user);
+            actif.setEtat(Etat.EN_STOCK); // Set the etat to EN_STOCK by default
+        });
 
         List<Actif> createdActifs = actifRepository.saveAll(actifs);
         if (createdActifs == null || createdActifs.isEmpty()) {
