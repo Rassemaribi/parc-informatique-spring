@@ -48,15 +48,10 @@ public class DemandeReparationService {
 
         demandeReparation.setStatus(StatusDemande.CREATED);
 
-        DemandeReparation createdDemandeReparation = demandeReparationRepository.save(demandeReparation);
+        DemandeReparation createdDemandeReparation = demandeReparationRepository.saveAndFlush(demandeReparation);
         if (createdDemandeReparation == null) {
             throw new BusinessException("Problème lors de la création de la demande");
         }
-
-        // Generate the reference and save the DemandeReparation entity again
-        createdDemandeReparation.generateReference();
-        createdDemandeReparation = demandeReparationRepository.save(createdDemandeReparation);
-
         return createdDemandeReparation;
     }
 

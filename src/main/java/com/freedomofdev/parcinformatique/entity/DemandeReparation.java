@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.freedomofdev.parcinformatique.enums.StatusDemande;
+import com.freedomofdev.parcinformatique.listener.DemandeReparationEntityListener;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.EntityListeners;
+
 
 import java.util.Calendar;
 import java.util.Date;
@@ -17,6 +20,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(DemandeReparationEntityListener.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class DemandeReparation {
     @Id
@@ -29,7 +33,7 @@ public class DemandeReparation {
     @Column(name = "rejet_motif")
     private String motifRejet;
 
-    @Column(name = "reference", updatable = false)
+    @Column(name = "reference")
     private String reference;
 
     @JsonIdentityReference(alwaysAsId = true)
@@ -72,11 +76,5 @@ public class DemandeReparation {
         } else if (status == StatusDemande.DONE || status == StatusDemande.REFUSE) {
             active = false;
         }
-    }
-
-    @PostPersist
-    public void generateReference() {
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        this.reference = "REP" + year + "-" + this.id;
     }
 }
