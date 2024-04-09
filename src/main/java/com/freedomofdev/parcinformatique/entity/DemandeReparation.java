@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity(name = "demandes_reparation")
@@ -27,6 +28,9 @@ public class DemandeReparation {
 
     @Column(name = "rejet_motif")
     private String motifRejet;
+
+    @Column(name = "reference", updatable = false)
+    private String reference;
 
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
@@ -68,5 +72,11 @@ public class DemandeReparation {
         } else if (status == StatusDemande.DONE || status == StatusDemande.REFUSE) {
             active = false;
         }
+    }
+
+    @PostPersist
+    public void generateReference() {
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        this.reference = "REP" + year + "-" + this.id;
     }
 }

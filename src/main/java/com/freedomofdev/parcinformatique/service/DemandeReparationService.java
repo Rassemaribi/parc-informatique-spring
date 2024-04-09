@@ -52,6 +52,11 @@ public class DemandeReparationService {
         if (createdDemandeReparation == null) {
             throw new BusinessException("Problème lors de la création de la demande");
         }
+
+        // Generate the reference and save the DemandeReparation entity again
+        createdDemandeReparation.generateReference();
+        createdDemandeReparation = demandeReparationRepository.save(createdDemandeReparation);
+
         return createdDemandeReparation;
     }
 
