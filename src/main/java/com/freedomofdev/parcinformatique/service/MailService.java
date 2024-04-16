@@ -63,7 +63,7 @@ public class MailService {
 
         email.AddRecipient(recipient);
         email.setTemplateId("7dnvo4d6d3xg5r86");
-        String etat = "Votre demande de réparation" + String.valueOf(demandeReparation.getReference()) + "pour l'actif "+  String.valueOf(demandeReparation.getActif().getNom())+ " a été acceptée. Nous allons nous occuper de votre demande dans les plus brefs délais.";
+        String etat = "Votre demande de réparation " + String.valueOf(demandeReparation.getReference()) + " pour l'actif "+  String.valueOf(demandeReparation.getActif().getNom())+ " a été acceptée. Nous allons nous occuper de votre demande dans les plus brefs délais.";
         email.AddVariable( "etat", etat);
 
         MailerSend ms = new MailerSend();
