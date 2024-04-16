@@ -60,7 +60,9 @@ public class MailService {
         Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
 
         email.AddRecipient(recipient);
-        email.text = "Votre demande de réparation a été rejetée pour le motif suivant: " + demandeReparation.getMotifRejet();
+        email.setTemplateId("7dnvo4d6d3xg5r86");
+        String variable = "acceptée. Nous allons nous occuper de votre demande dans les plus brefs délais.";
+        email.AddVariable(recipient, "demande.etat", variable);
 
         MailerSend ms = new MailerSend();
         ms.setToken(mailerSendApiKey);
