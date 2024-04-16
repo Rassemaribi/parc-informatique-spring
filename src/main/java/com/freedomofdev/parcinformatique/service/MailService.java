@@ -18,7 +18,7 @@ public class MailService {
 
     @Value("${mail_domain}")
     private String mailDomain;
-
+/*
     // confirmation email
     public void sendConfirmationEmail(User user) {
 
@@ -26,15 +26,17 @@ public class MailService {
 
         email.setFrom("Freedom Of Dev Services", mailDomain);
 
-        email.subject = "Confirmation de votre inscription sur le parc informatique";
+        email.subject = "Bienvenue au parc informatique";
 
         Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("zr6ke4nz3je4on12");
+        email.setTemplateId("ynrw7gyv13kg2k8e");
 
         email.AddVariable(recipient, "username", user.getUsername());
+        email.AddVariable(recipient, "password", user.getPassword());
+
 
         MailerSend ms = new MailerSend();
         ms.setToken(mailerSendApiKey);
@@ -48,7 +50,7 @@ public class MailService {
             e.printStackTrace();
         }
     }
-
+*/
     // acceptance email
     public void sendAcceptanceEmail(User user, DemandeReparation demandeReparation) {
         Email email = new Email();
@@ -61,8 +63,8 @@ public class MailService {
 
         email.AddRecipient(recipient);
         email.setTemplateId("7dnvo4d6d3xg5r86");
-        String variable = "acceptée. Nous allons nous occuper de votre demande dans les plus brefs délais.";
-        email.AddVariable(recipient, "demande.etat", variable);
+        String etat = "Votre demande de réparation" + String.valueOf(demandeReparation.getReference()) + "pour l'actif "+  String.valueOf(demandeReparation.getActif().getNom())+ " a été acceptée. Nous allons nous occuper de votre demande dans les plus brefs délais.";
+        email.AddVariable( "etat", etat);
 
         MailerSend ms = new MailerSend();
         ms.setToken(mailerSendApiKey);
@@ -87,7 +89,62 @@ public class MailService {
 
         email.AddRecipient(recipient);
 
-        email.text = "Votre demande de réparation a été rejetée pour le motif suivant: " + demandeReparation.getMotifRejet();
+        email.setTemplateId("7dnvo4d6d3xg5r86");
+        String etat = "Votre demande de réparation " + String.valueOf(demandeReparation.getReference()) + " pour l'actif "+  String.valueOf(demandeReparation.getActif().getNom())+ " a été refusée pour le motif suivant "+demandeReparation.getMotifRejet();
+        email.AddVariable( "etat", etat);
+
+        MailerSend ms = new MailerSend();
+        ms.setToken(mailerSendApiKey);
+
+        try {
+            MailerSendResponse response = ms.emails().send(email);
+            System.out.println(response.messageId);
+        } catch (MailerSendException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendRepairSuccessEmail(User user, DemandeReparation demandeReparation) {
+        Email email = new Email();
+
+        email.setFrom("Freedom Of Dev Services", mailDomain);
+
+        email.subject = "Votre réparation a été effectuée avec succès";
+
+        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+
+        email.AddRecipient(recipient);
+
+        email.setTemplateId("7dnvo4d6d3xg5r86");
+        String etat = "Votre actif "+ String.valueOf(demandeReparation.getActif().getNom())+ " concerné par la demande de réparation " + String.valueOf(demandeReparation.getReference()) + " a été réparé avec succès. Vous pouvez maintenant le récupérer.";
+        email.AddVariable( "etat", etat);
+        MailerSend ms = new MailerSend();
+        ms.setToken(mailerSendApiKey);
+
+        try {
+            MailerSendResponse response = ms.emails().send(email);
+            System.out.println(response.messageId);
+        } catch (MailerSendException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // MailService.java
+
+    public void sendRepairFailureEmail(User user, DemandeReparation demandeReparation) {
+        Email email = new Email();
+
+        email.setFrom("Freedom Of Dev Services", mailDomain);
+
+        email.subject = "Votre réparation n'a pas pu être effectuée";
+
+        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+
+        email.AddRecipient(recipient);
+
+        email.setTemplateId("7dnvo4d6d3xg5r86");
+        String etat = "Votre actif "+ String.valueOf(demandeReparation.getActif().getNom())+ " concerné par la demande de réparation " + String.valueOf(demandeReparation.getReference()) + " n'a pas pu etre réparé. Vous pouvez nous contacter pour demander l'acquisition d'un nouvel actif.";
+        email.AddVariable( "etat", etat);
 
         MailerSend ms = new MailerSend();
         ms.setToken(mailerSendApiKey);

@@ -112,6 +112,8 @@ public class DemandeReparationService {
                 .orElseThrow(() -> new ResourceNotFoundException("DemandeReparation", "id", id));
     }
 
+    // DemandeReparationService.java
+
     public DemandeReparation finirReparationAvecSucces(Long id) {
         return demandeReparationRepository.findById(id)
                 .map(existingDemandeReparation -> {
@@ -131,10 +133,15 @@ public class DemandeReparationService {
                         throw new BusinessException("Problème lors de la finition de la demande de réparation d'id: " + id);
                     }
 
+                    // Send repair success email
+                    mailService.sendRepairSuccessEmail(updatedDemandeReparation.getReparationRequestedBy(), updatedDemandeReparation);
+
                     return updatedDemandeReparation;
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("DemandeReparation", "id", id));
     }
+
+    // DemandeReparationService.java
 
     public DemandeReparation finirReparationAvecEchec(Long id) {
         return demandeReparationRepository.findById(id)
@@ -155,6 +162,9 @@ public class DemandeReparationService {
                     if (updatedDemandeReparation == null) {
                         throw new BusinessException("Problème lors de la finition de la demande de réparation d'id: " + id);
                     }
+
+                    // Send repair failure email
+                    mailService.sendRepairFailureEmail(updatedDemandeReparation.getReparationRequestedBy(), updatedDemandeReparation);
 
                     return updatedDemandeReparation;
                 })
