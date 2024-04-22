@@ -15,22 +15,24 @@ public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-
     private String username;
-
     private String email;
-
     @JsonIgnore
     private String password;
-
+    private String nom;
+    private String prenom;
+    private String numeroTelephone;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String email, String password,
+    public UserDetailsImpl(Long id, String username, String email, String password, String nom, String prenom, String numeroTelephone,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.numeroTelephone = numeroTelephone;
         this.authorities = authorities;
     }
 
@@ -44,12 +46,10 @@ public class UserDetailsImpl implements UserDetails {
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getNom(),
+                user.getPrenom(),
+                user.getNumeroTelephone(),
                 authorities);
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
     }
 
     public Long getId() {
@@ -60,14 +60,31 @@ public class UserDetailsImpl implements UserDetails {
         return email;
     }
 
+    public String getNom() {
+        return nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public String getNumeroTelephone() {
+        return numeroTelephone;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
     @Override
     public String getPassword() {
         return password;
     }
 
     @Override
-    public String getUsername() {
-        return username;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
     }
 
     @Override

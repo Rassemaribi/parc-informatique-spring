@@ -71,43 +71,49 @@ public class AuthController {
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
                         userDetails.getEmail(),
+                        userDetails.getNom(),
+                        userDetails.getPrenom(),
+                        userDetails.getNumeroTelephone(),
                         roles));
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Erreur: username deja utilisé!"));
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Erreur: email deja utilisé!"));
         }
 
         // Create new user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+                encoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getNom(),
+                signUpRequest.getPrenom(),
+                signUpRequest.getNumeroTelephone());
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
             Role collaborateurRole = roleRepository.findByName(AppRole.ROLE_COLLABORATEUR)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    .orElseThrow(() -> new RuntimeException("Erreur: Role non trouvé."));
             roles.add(collaborateurRole);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "DSI":
                         Role DSIRole = roleRepository.findByName(AppRole.ROLE_DSI)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new RuntimeException("Erreur: Role non trouvé."));
                         roles.add(DSIRole);
 
                         break;
                     default:
                         Role userRole = roleRepository.findByName(AppRole.ROLE_COLLABORATEUR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new RuntimeException("Erreur: Role non trouvé."));
                         roles.add(userRole);
                 }
             });
@@ -116,13 +122,13 @@ public class AuthController {
         user.setRoles(roles);
         userRepository.save(user);
         //mailService.sendConfirmationEmail(user);
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès!"));
     }
 
     @PostMapping("/signout")
     public ResponseEntity<?> logoutUser() {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(new MessageResponse("You've been signed out!"));
+                .body(new MessageResponse("Déconnexion réussie!"));
     }
 }

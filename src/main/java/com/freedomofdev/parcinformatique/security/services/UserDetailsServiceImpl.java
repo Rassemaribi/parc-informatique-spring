@@ -33,6 +33,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userRepository.findById(id).orElse(null);
     }
 
+    public String getUserNomById(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        return user != null ? user.getNom() : null;
+    }
+
+    public String getUserPrenomById(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        return user != null ? user.getPrenom() : null;
+    }
+
+    public String getUserNumeroTelephoneById(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        return user != null ? user.getNumeroTelephone() : null;
+    }
+
     public void assignActifToUser(Long userId, Long actifId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
@@ -58,7 +73,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public void removeActifFromUser(Long userId, Long actifId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Error: User is not found."));
+                .orElseThrow(() -> new RuntimeException("Erreur."));
         Actif actif = actifRepository.findById(actifId)
                 .orElseThrow(() -> new RuntimeException("Error: Actif is not found."));
 
