@@ -18,7 +18,7 @@ public class MailService {
 
     @Value("${mail_domain}")
     private String mailDomain;
-/*
+
     // confirmation email
     public void sendConfirmationEmail(User user) {
 
@@ -33,9 +33,9 @@ public class MailService {
         email.AddRecipient(recipient);
 
         email.setTemplateId("ynrw7gyv13kg2k8e");
-
-        email.AddVariable(recipient, "username", user.getUsername());
-        email.AddVariable(recipient, "password", user.getPassword());
+        email.AddVariable("prenom", user.getPrenom());
+        email.AddVariable("username", user.getUsername());
+        email.AddVariable("password", user.getPassword());
 
 
         MailerSend ms = new MailerSend();
@@ -50,7 +50,7 @@ public class MailService {
             e.printStackTrace();
         }
     }
-*/
+
     // acceptance email
     public void sendAcceptanceEmail(User user, DemandeReparation demandeReparation) {
         Email email = new Email();

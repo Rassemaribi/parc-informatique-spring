@@ -121,7 +121,11 @@ public class AuthController {
 
         user.setRoles(roles);
         userRepository.save(user);
-        //mailService.sendConfirmationEmail(user);
+
+        User userwithpassword = user;
+        user.setPassword(signUpRequest.getPassword());
+
+        mailService.sendConfirmationEmail(userwithpassword);
         return ResponseEntity.ok(new MessageResponse("Utilisateur enregistré avec succès!"));
     }
 
