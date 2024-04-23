@@ -47,8 +47,8 @@ public class DemandeReparationController {
 
     @PreAuthorize("hasRole('DSI')")
     @PutMapping("/finirEchec/{id}")
-    public ResponseEntity<DemandeReparation> finirReparationAvecEchec(@PathVariable Long id) {
-        DemandeReparation finishedDemandeReparation = demandeReparationService.finirReparationAvecEchec(id);
+    public ResponseEntity<DemandeReparation> finirReparationAvecEchec(@PathVariable Long id, @RequestParam Boolean archive) {
+        DemandeReparation finishedDemandeReparation = demandeReparationService.finirReparationAvecEchec(id, archive);
         return ResponseEntity.ok(finishedDemandeReparation);
     }
 

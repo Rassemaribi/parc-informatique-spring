@@ -143,7 +143,7 @@ public class DemandeReparationService {
 
     // DemandeReparationService.java
 
-    public DemandeReparation finirReparationAvecEchec(Long id) {
+    public DemandeReparation finirReparationAvecEchec(Long id, Boolean archive) {
         return demandeReparationRepository.findById(id)
                 .map(existingDemandeReparation -> {
                     if (existingDemandeReparation.getStatus() != StatusDemande.PENDING) {
@@ -152,9 +152,9 @@ public class DemandeReparationService {
 
                     existingDemandeReparation.setStatus(StatusDemande.DONE);
 
-                    // Set the status of the Actif to EN_REBUT and assigned user to null
+                    // Set the status of the Actif to EN_REBUT or ARCHIVE based on the archive parameter, and assigned user to null
                     Actif actif = existingDemandeReparation.getActif();
-                    actif.setEtat(Etat.EN_REBUT);
+                    actif.setEtat(archive ? Etat.ARCHIVE : Etat.EN_REBUT);
                     actif.setAssignedUser(null);
                     actifRepository.save(actif);
 
