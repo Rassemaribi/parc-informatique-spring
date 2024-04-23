@@ -1,5 +1,6 @@
 package com.freedomofdev.parcinformatique.security.services;
 
+import com.freedomofdev.parcinformatique.dto.UserDto;
 import com.freedomofdev.parcinformatique.entity.Actif;
 import com.freedomofdev.parcinformatique.entity.User;
 import com.freedomofdev.parcinformatique.enums.Etat;
@@ -11,6 +12,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -86,5 +91,23 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         userRepository.save(user);
         actifRepository.save(actif);
+    }
+
+    @Transactional
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    private UserDto convertToDto(User user) {
+        UserDto dto = new UserDto();
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setNom(user.getNom());
+        dto.setPrenom(user.getPrenom());
+        dto.setNumeroTelephone(user.getNumeroTelephone());
+        dto.setAssignedActifs(new ArrayList<>(user.getAssignedActifs()));
+        return dto;
     }
 }

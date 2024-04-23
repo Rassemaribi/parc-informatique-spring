@@ -1,5 +1,6 @@
 package com.freedomofdev.parcinformatique.controller;
 
+import com.freedomofdev.parcinformatique.dto.UserDto;
 import com.freedomofdev.parcinformatique.entity.User;
 import com.freedomofdev.parcinformatique.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -37,4 +40,10 @@ public class UserController {
         return ResponseEntity.ok("Actif retiré avec succès de l'utilisateur");
     }
 
+    @PreAuthorize("hasRole('DSI')")
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = userService.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 }
