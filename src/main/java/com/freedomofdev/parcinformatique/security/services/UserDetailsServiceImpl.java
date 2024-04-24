@@ -108,6 +108,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         dto.setPrenom(user.getPrenom());
         dto.setNumeroTelephone(user.getNumeroTelephone());
         dto.setAssignedActifs(new ArrayList<>(user.getAssignedActifs()));
+        dto.setRoles(user.getRoles().stream().map(role -> role.getName().name()).collect(Collectors.toList())); // map roles
         return dto;
     }
 }
