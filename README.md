@@ -39,10 +39,13 @@ To sign up a user with the ROLE_DSI using Postman, follow these steps:
 
 ```json
 {
-    "username": "dsi",
-    "email": "dsi@fod.com",
-    "password": "12345678",
-    "role": ["COLLABORATEUR", "DSI"]
+  "username": "dsi",
+  "email": "dsi@fod.com",
+  "password": "12345678",
+  "role": ["COLLABORATEUR", "DSI"],
+  "nom": "Jalleli",
+  "prenom": "Karim",
+  "numeroTelephone": "28487990"
 }
 ```
 

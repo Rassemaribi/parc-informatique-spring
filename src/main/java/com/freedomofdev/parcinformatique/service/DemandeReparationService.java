@@ -186,4 +186,9 @@ public class DemandeReparationService {
         }
         return demandesReparation;
     }
+
+    public DemandeReparation getDemandeReparationById(Long id) {
+        return demandeReparationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("DemandeReparation", "id", id));
+    }
 }

@@ -65,4 +65,11 @@ public class DemandeReparationController {
         List<DemandeReparation> demandesReparation = demandeReparationService.getDemandesReparationByUserId(userId);
         return ResponseEntity.ok(demandesReparation);
     }
+
+    @PreAuthorize("hasRole('DSI') OR hasRole('COLLABORATEUR')")
+    @GetMapping("/{id}")
+    public ResponseEntity<DemandeReparation> getDemandeReparationById(@PathVariable Long id) {
+        DemandeReparation demandeReparation = demandeReparationService.getDemandeReparationById(id);
+        return new ResponseEntity<>(demandeReparation, HttpStatus.OK);
+    }
 }
