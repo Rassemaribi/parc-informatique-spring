@@ -36,6 +36,9 @@ public class DemandeReparation {
     @Column(name = "reference")
     private String reference;
 
+    @Column(name = "estimation")
+    private Integer estimation;
+
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     @JoinColumn(name = "actif_id")

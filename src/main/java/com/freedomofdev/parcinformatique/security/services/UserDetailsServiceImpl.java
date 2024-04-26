@@ -53,6 +53,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return user != null ? user.getNumeroTelephone() : null;
     }
 
+    @Transactional
     public void assignActifToUser(Long userId, Long actifId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
@@ -76,6 +77,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         actifRepository.save(actif);
     }
 
+    @Transactional
     public void removeActifFromUser(Long userId, Long actifId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Erreur."));

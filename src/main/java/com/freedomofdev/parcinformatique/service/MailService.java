@@ -156,4 +156,32 @@ public class MailService {
             e.printStackTrace();
         }
     }
+
+    // MailService.java
+
+    public void sendReminderEmail(User user, DemandeReparation demandeReparation) {
+        Email email = new Email();
+
+        email.setFrom("Freedom Of Dev Services", mailDomain);
+
+        email.subject = "Rappel: Demande de réparation en retard";
+
+        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+
+        email.AddRecipient(recipient);
+
+        email.setTemplateId("zr6ke4n5mwv4on12");
+        String etat = "La demande de réparation " + String.valueOf(demandeReparation.getReference()) + " pour l'actif "+  String.valueOf(demandeReparation.getActif().getNom())+ " est en retard. Merci de prendre les mesures nécessaires.";
+        email.AddVariable( "etat", etat);
+
+        MailerSend ms = new MailerSend();
+        ms.setToken(mailerSendApiKey);
+
+        try {
+            MailerSendResponse response = ms.emails().send(email);
+            System.out.println(response.messageId);
+        } catch (MailerSendException e) {
+            e.printStackTrace();
+        }
+    }
 }

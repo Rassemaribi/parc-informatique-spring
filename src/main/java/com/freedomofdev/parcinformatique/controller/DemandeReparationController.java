@@ -26,8 +26,8 @@ public class DemandeReparationController {
 
     @PreAuthorize("hasRole('DSI')")
     @PutMapping("/accept/{id}")
-    public ResponseEntity<DemandeReparation> acceptDemandeReparation(@PathVariable Long id, @RequestParam Long userId) {
-        DemandeReparation acceptedDemandeReparation = demandeReparationService.acceptDemandeReparation(id, userId);
+    public ResponseEntity<DemandeReparation> acceptDemandeReparation(@PathVariable Long id, @RequestParam Long userId, @RequestParam Integer estimation) {
+        DemandeReparation acceptedDemandeReparation = demandeReparationService.acceptDemandeReparation(id, userId, estimation);
         return ResponseEntity.ok(acceptedDemandeReparation);
     }
 

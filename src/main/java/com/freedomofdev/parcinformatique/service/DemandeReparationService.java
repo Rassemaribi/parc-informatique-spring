@@ -13,6 +13,7 @@ import com.freedomofdev.parcinformatique.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class DemandeReparationService {
         return createdDemandeReparation;
     }
 
-    public DemandeReparation acceptDemandeReparation(Long id, Long userId) {
+    public DemandeReparation acceptDemandeReparation(Long id, Long userId, Integer estimation) {
         return demandeReparationRepository.findById(id)
                 .map(existingDemandeReparation -> {
                     existingDemandeReparation.setStatus(StatusDemande.PENDING);
@@ -67,6 +68,8 @@ public class DemandeReparationService {
                     System.out.println("handledByUser: " + handledByUser);
 
                     existingDemandeReparation.setReparationHandledBy(handledByUser);
+                    existingDemandeReparation.setEstimation(estimation);
+
 
                     // Set the status of the Actif to EN_REPARATION
                     Actif actif = existingDemandeReparation.getActif();
@@ -190,5 +193,18 @@ public class DemandeReparationService {
     public DemandeReparation getDemandeReparationById(Long id) {
         return demandeReparationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("DemandeReparation", "id", id));
+    }
+
+    public void sendReminderForLateDemandes() {
+        List<DemandeReparation> demandes = demandeReparationRepository.findAll();
+        Date currentDate = new Date();
+        for (DemandeReparation demande : demandes) {
+            if (demande.getStatus() == StatusDemande.PENDING) {
+                Date dueDate = Date.from(demande.getDateResponse().toInstant().plus(Duration.ofDays(demande.getEstimation() + 3)));
+                if (currentDate.after(dueDate)) {
+                    mailService.sendReminderEmail(demande.getReparationHandledBy(), demande);
+                }
+            }
+        }
     }
 }
