@@ -1,9 +1,6 @@
 package com.freedomofdev.parcinformatique.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.freedomofdev.parcinformatique.enums.StatusDemande;
 import com.freedomofdev.parcinformatique.listener.DemandeReparationEntityListener;
 import jakarta.persistence.*;
@@ -47,12 +44,12 @@ public class DemandeReparation {
     @Column(name = "active")
     private Boolean active = false;
 
-    @JsonBackReference(value = "requestedByReparation-reference")
+    @JsonIdentityReference(alwaysAsId = true) // This will serialize the User object as its ID
     @ManyToOne
     @JoinColumn(name = "requested_by_user_id")
     private User reparationRequestedBy;
 
-    @JsonBackReference(value = "handledByReparation-reference")
+    @JsonIdentityReference(alwaysAsId = true) // This will serialize the User object as its ID
     @ManyToOne
     @JoinColumn(name = "responded_by_user_id")
     private User reparationHandledBy;

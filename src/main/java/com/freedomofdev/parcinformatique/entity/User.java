@@ -54,7 +54,7 @@ public class User {
     private String numeroTelephone;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "assignedUser", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "assignedUser",cascade = CascadeType.ALL)
     private List<Actif> assignedActifs = new ArrayList<>();
 
     @JsonIdentityReference(alwaysAsId = true)

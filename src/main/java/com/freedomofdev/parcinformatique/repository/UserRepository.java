@@ -22,7 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByNumeroTelephone(String numeroTelephone);
 
-
     @EntityGraph(attributePaths = {"demandesAcquisitionCollaborateur", "demandesAcquisitionDSI", "demandesReparationCollaborateur", "demandesReparationDSI", "createdActifs", "assignedActifs", "roles"})
     Optional<User> findById(Long id);
 

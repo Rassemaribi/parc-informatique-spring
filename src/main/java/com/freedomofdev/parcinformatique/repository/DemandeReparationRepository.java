@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface DemandeReparationRepository extends JpaRepository<DemandeReparation, Long> {
-    @EntityGraph(attributePaths = {"reparationHandledBy"})
+    @EntityGraph(attributePaths = {"reparationHandledBy", "reparationRequestedBy", "actif", "actif.demandesReparation"})
     List<DemandeReparation> findByReparationRequestedBy_Id(Long userId);
 
     List<DemandeReparation> findByActifAndActive(Actif actif, boolean active);
