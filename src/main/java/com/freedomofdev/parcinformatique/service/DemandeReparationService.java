@@ -12,6 +12,7 @@ import com.freedomofdev.parcinformatique.repository.DemandeReparationRepository;
 import com.freedomofdev.parcinformatique.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.Date;
@@ -182,6 +183,7 @@ public class DemandeReparationService {
         return demandeReparations;
     }
 
+    @Transactional
     public List<DemandeReparation> getDemandesReparationByUserId(Long userId) {
         List<DemandeReparation> demandesReparation = demandeReparationRepository.findByReparationRequestedBy_Id(userId);
         if (demandesReparation == null || demandesReparation.isEmpty()) {
