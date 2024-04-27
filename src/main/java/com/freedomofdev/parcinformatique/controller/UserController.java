@@ -37,7 +37,7 @@ public class UserController {
     @DeleteMapping("/{userId}/removeActif/{actifId}")
     public ResponseEntity<?> removeActifFromUser(@PathVariable Long userId, @PathVariable Long actifId) {
         userService.removeActifFromUser(userId, actifId);
-        return ResponseEntity.ok("Actif retiré avec succès de l'utilisateur");
+        return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('DSI')")
@@ -49,8 +49,8 @@ public class UserController {
 
     @PreAuthorize("hasRole('DSI')")
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> deleteUserAndUnassignActifs(@PathVariable Long userId) {
+    public ResponseEntity<Void> deleteUserAndUnassignActifs(@PathVariable Long userId) {
         userService.deleteUserAndUnassignActifs(userId);
-        return ResponseEntity.ok("Utilisateur supprimé et actifs assignés sont désassignés avec succès");
+        return ResponseEntity.noContent().build();
     }
 }
