@@ -113,4 +113,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         dto.setRoles(user.getRoles().stream().map(role -> role.getName().name()).collect(Collectors.toList())); // map roles
         return dto;
     }
+
+    @Transactional
+    public void deleteUserAndUnassignActifs(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec Id: " + userId));
+
+        for (Actif actif : user.getAssignedActifs()) {
+            actif.setAssignedUser(null);
+            actif.setEtat(Etat.EN_STOCK);
+            actifRepository.save(actif);
+        }
+        user.getRoles().clear();
+        userRepository.delete(user);
+    }
 }

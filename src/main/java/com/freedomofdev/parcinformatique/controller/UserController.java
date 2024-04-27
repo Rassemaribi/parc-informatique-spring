@@ -46,4 +46,11 @@ public class UserController {
         List<UserDto> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('DSI')")
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUserAndUnassignActifs(@PathVariable Long userId) {
+        userService.deleteUserAndUnassignActifs(userId);
+        return ResponseEntity.ok("Utilisateur supprimé et actifs assignés sont désassignés avec succès");
+    }
 }
