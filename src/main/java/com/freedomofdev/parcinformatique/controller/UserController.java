@@ -30,7 +30,7 @@ public class UserController {
     @PostMapping("/{userId}/assignActif/{actifId}")
     public ResponseEntity<?> assignActifToUser(@PathVariable Long userId, @PathVariable Long actifId) {
         userService.assignActifToUser(userId, actifId);
-        return ResponseEntity.ok("Actif assigné avec succès à l'utilisateur");
+        return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('DSI')")
