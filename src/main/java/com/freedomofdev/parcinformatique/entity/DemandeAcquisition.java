@@ -1,6 +1,7 @@
 package com.freedomofdev.parcinformatique.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,12 +21,12 @@ public class DemandeAcquisition {
     @Column(name = "demande_description")
     private String demandeDescription;
 
-    @JsonBackReference(value = "requestedByAcquisition-reference")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     @JoinColumn(name = "requested_by_user_id")
     private User acquisitionRequestedBy;
 
-    @JsonBackReference(value = "handledByAcquisition-reference")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     @JoinColumn(name = "responded_by_user_id")
     private User acquisitionHandledBy;

@@ -69,11 +69,9 @@ public class User {
     @OneToMany(mappedBy = "acquisitionHandledBy")
     private List<DemandeAcquisition> demandesAcquisitionDSI = new ArrayList<>();
 
-    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "reparationRequestedBy")
     private List<DemandeReparation> demandesReparationCollaborateur;
 
-    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "reparationHandledBy")
     private List<DemandeReparation> demandesReparationDSI;
 

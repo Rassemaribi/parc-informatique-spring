@@ -44,12 +44,12 @@ public class DemandeReparation {
     @Column(name = "active")
     private Boolean active = false;
 
-    @JsonIdentityReference(alwaysAsId = true) // This will serialize the User object as its ID
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     @JoinColumn(name = "requested_by_user_id")
     private User reparationRequestedBy;
 
-    @JsonIdentityReference(alwaysAsId = true) // This will serialize the User object as its ID
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     @JoinColumn(name = "responded_by_user_id")
     private User reparationHandledBy;
