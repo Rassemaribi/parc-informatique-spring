@@ -61,19 +61,19 @@ public class User {
     @OneToMany(mappedBy = "createdByDSI", cascade = CascadeType.ALL)
     private List<Actif> createdActifs = new ArrayList<>();
 
-    @JsonManagedReference(value = "requestedByAcquisition-reference")
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "acquisitionRequestedBy")
     private List<DemandeAcquisition> demandesAcquisitionCollaborateur = new ArrayList<>();
 
-    @JsonManagedReference(value = "handledByAcquisition-reference")
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "acquisitionHandledBy")
     private List<DemandeAcquisition> demandesAcquisitionDSI = new ArrayList<>();
 
-    @JsonManagedReference(value = "requestedByReparation-reference")
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "reparationRequestedBy")
     private List<DemandeReparation> demandesReparationCollaborateur;
 
-    @JsonManagedReference(value = "handledByReparation-reference")
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "reparationHandledBy")
     private List<DemandeReparation> demandesReparationDSI;
 
