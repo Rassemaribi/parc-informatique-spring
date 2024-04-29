@@ -91,6 +91,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         user.getAssignedActifs().remove(actif);
         actif.setAssignedUser(null);
 
+        // Set the state of the Actif to EN_STOCK
+        actif.setEtat(Etat.EN_STOCK);
+
         userRepository.save(user);
         actifRepository.save(actif);
     }
