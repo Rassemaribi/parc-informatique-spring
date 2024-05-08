@@ -46,6 +46,6 @@ public class DemandeAcquisition {
     private Status status;
 
     public enum Status {
-        CREATED, ACCEPTED, REJECTED
+        CREATED, PENDING, DONE, REFUSE
     }
 }
