@@ -1,5 +1,6 @@
 package com.freedomofdev.parcinformatique.service;
 
+import com.freedomofdev.parcinformatique.entity.DemandeAcquisition;
 import com.freedomofdev.parcinformatique.entity.DemandeReparation;
 import com.freedomofdev.parcinformatique.entity.User;
 import com.mailersend.sdk.MailerSend;
@@ -173,6 +174,86 @@ public class MailService {
         email.setTemplateId("zr6ke4n5mwv4on12");
         String etat = "La demande de réparation " + String.valueOf(demandeReparation.getReference()) + " pour l'actif "+  String.valueOf(demandeReparation.getActif().getNom())+ " est en retard. Merci de prendre les mesures nécessaires.";
         email.AddVariable( "etat", etat);
+
+        MailerSend ms = new MailerSend();
+        ms.setToken(mailerSendApiKey);
+
+        try {
+            MailerSendResponse response = ms.emails().send(email);
+            System.out.println(response.messageId);
+        } catch (MailerSendException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // MailService.java
+
+    public void sendAcquisitionAcceptanceEmail(User user, DemandeAcquisition demandeAcquisition) {
+        Email email = new Email();
+
+        email.setFrom("Freedom Of Dev Services", mailDomain);
+
+        email.subject = "Your acquisition request has been accepted";
+
+        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+
+        email.AddRecipient(recipient);
+
+        email.setTemplateId("template_id_for_acceptance");
+        String etat = "Your acquisition request " + demandeAcquisition.getReference() + " has been accepted.";
+        email.AddVariable("etat", etat);
+
+        MailerSend ms = new MailerSend();
+        ms.setToken(mailerSendApiKey);
+
+        try {
+            MailerSendResponse response = ms.emails().send(email);
+            System.out.println(response.messageId);
+        } catch (MailerSendException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendAcquisitionRejectionEmail(User user, DemandeAcquisition demandeAcquisition) {
+        Email email = new Email();
+
+        email.setFrom("Freedom Of Dev Services", mailDomain);
+
+        email.subject = "Your acquisition request has been rejected";
+
+        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+
+        email.AddRecipient(recipient);
+
+        email.setTemplateId("template_id_for_rejection");
+        String etat = "Your acquisition request " + demandeAcquisition.getReference() + " has been rejected for the following reason: " + demandeAcquisition.getRejectionReason();
+        email.AddVariable("etat", etat);
+
+        MailerSend ms = new MailerSend();
+        ms.setToken(mailerSendApiKey);
+
+        try {
+            MailerSendResponse response = ms.emails().send(email);
+            System.out.println(response.messageId);
+        } catch (MailerSendException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendAcquisitionNotificationEmail(User user, DemandeAcquisition demandeAcquisition) {
+        Email email = new Email();
+
+        email.setFrom("Freedom Of Dev Services", mailDomain);
+
+        email.subject = "Your acquisition request is pending";
+
+        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+
+        email.AddRecipient(recipient);
+
+        email.setTemplateId("template_id_for_notification");
+        String etat = "Your acquisition request " + demandeAcquisition.getReference() + " is pending.";
+        email.AddVariable("etat", etat);
 
         MailerSend ms = new MailerSend();
         ms.setToken(mailerSendApiKey);
