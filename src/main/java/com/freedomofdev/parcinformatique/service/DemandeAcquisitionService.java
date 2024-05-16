@@ -44,7 +44,7 @@ public class DemandeAcquisitionService {
     public DemandeAcquisition acceptDemandeAcquisition(Long id, Long userId) {
         return demandeAcquisitionRepository.findById(id)
                 .map(existingDemandeAcquisition -> {
-                    existingDemandeAcquisition.setStatus(DemandeAcquisition.Status.DONE);
+                    existingDemandeAcquisition.setStatus(DemandeAcquisition.Status.PENDING);
                     existingDemandeAcquisition.setDateResponse(new Date());
 
                     User handledByUser = userRepository.findById(userId)
@@ -87,7 +87,7 @@ public class DemandeAcquisitionService {
     public DemandeAcquisition notifyDemandeAcquisition(Long id) {
         return demandeAcquisitionRepository.findById(id)
                 .map(existingDemandeAcquisition -> {
-                    existingDemandeAcquisition.setStatus(DemandeAcquisition.Status.PENDING);
+                    existingDemandeAcquisition.setStatus(DemandeAcquisition.Status.DONE);
                     existingDemandeAcquisition.setDateResponse(new Date());
 
                     DemandeAcquisition updatedDemandeAcquisition = demandeAcquisitionRepository.save(existingDemandeAcquisition);
