@@ -63,7 +63,7 @@ public class MailService {
         Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
 
         email.AddRecipient(recipient);
-        email.setTemplateId("zr6ke4n5mwv4on12");
+        email.setTemplateId("7dnvo4d6d3xg5r86");
         String etat = "Votre demande de réparation " + String.valueOf(demandeReparation.getReference()) + " pour l'actif "+  String.valueOf(demandeReparation.getActif().getNom())+ " a été acceptée. Nous allons nous occuper de votre demande dans les plus brefs délais.";
         email.AddVariable( "etat", etat);
 
@@ -90,7 +90,7 @@ public class MailService {
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("zr6ke4n5mwv4on12");
+        email.setTemplateId("7dnvo4d6d3xg5r86");
         String etat = "Votre demande de réparation " + String.valueOf(demandeReparation.getReference()) + " pour l'actif "+  String.valueOf(demandeReparation.getActif().getNom())+ " a été refusée pour le motif suivant "+demandeReparation.getMotifRejet();
         email.AddVariable( "etat", etat);
 
@@ -116,7 +116,7 @@ public class MailService {
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("zr6ke4n5mwv4on12");
+        email.setTemplateId("7dnvo4d6d3xg5r86");
         String etat = "Votre actif "+ String.valueOf(demandeReparation.getActif().getNom())+ " concerné par la demande de réparation " + String.valueOf(demandeReparation.getReference()) + " a été réparé avec succès. Vous pouvez maintenant le récupérer.";
         email.AddVariable( "etat", etat);
         MailerSend ms = new MailerSend();
@@ -143,7 +143,7 @@ public class MailService {
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("zr6ke4n5mwv4on12");
+        email.setTemplateId("7dnvo4d6d3xg5r86");
         String etat = "Votre actif "+ String.valueOf(demandeReparation.getActif().getNom())+ " concerné par la demande de réparation " + String.valueOf(demandeReparation.getReference()) + " n'a pas pu etre réparé. Vous pouvez nous contacter pour demander l'acquisition d'un nouvel actif.";
         email.AddVariable( "etat", etat);
 
@@ -171,7 +171,7 @@ public class MailService {
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("zr6ke4n5mwv4on12");
+        email.setTemplateId("7dnvo4d6d3xg5r86");
         String etat = "La demande de réparation " + String.valueOf(demandeReparation.getReference()) + " pour l'actif "+  String.valueOf(demandeReparation.getActif().getNom())+ " est en retard. Merci de prendre les mesures nécessaires.";
         email.AddVariable( "etat", etat);
 
@@ -193,14 +193,14 @@ public class MailService {
 
         email.setFrom("Freedom Of Dev Services", mailDomain);
 
-        email.subject = "Your acquisition request has been accepted";
+        email.subject = "Votre demande d'acquisition a été aceptée";
 
         Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("template_id_for_acceptance");
-        String etat = "Your acquisition request " + demandeAcquisition.getReference() + " has been accepted.";
+        email.setTemplateId("7dnvo4d6d3xg5r86");
+        String etat = "Votre demande d'acquisition avec la référence " + demandeAcquisition.getReference() + " a été aceptée.";
         email.AddVariable("etat", etat);
 
         MailerSend ms = new MailerSend();
@@ -219,14 +219,14 @@ public class MailService {
 
         email.setFrom("Freedom Of Dev Services", mailDomain);
 
-        email.subject = "Your acquisition request has been rejected";
+        email.subject = "Votre demande d'acquisition a été rejetée";
 
         Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("template_id_for_rejection");
-        String etat = "Your acquisition request " + demandeAcquisition.getReference() + " has been rejected for the following reason: " + demandeAcquisition.getRejectionReason();
+        email.setTemplateId("7dnvo4d6d3xg5r86");
+        String etat = "Votre demande d'acquisition avec la référence " + demandeAcquisition.getReference() + " a été rejetée pour le motif suivant: " + demandeAcquisition.getRejectionReason();
         email.AddVariable("etat", etat);
 
         MailerSend ms = new MailerSend();
@@ -245,14 +245,14 @@ public class MailService {
 
         email.setFrom("Freedom Of Dev Services", mailDomain);
 
-        email.subject = "Your acquisition request is pending";
+        email.subject = "Votre demande d'acquisition est cloturée avec succès";
 
         Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("template_id_for_notification");
-        String etat = "Your acquisition request " + demandeAcquisition.getReference() + " is pending.";
+        email.setTemplateId("7dnvo4d6d3xg5r86");
+        String etat = "Votre demande d'acquisition avec la référence " + demandeAcquisition.getReference() + " est cloturée avec succès. Vous pouvez récuperer votre actif.";
         email.AddVariable("etat", etat);
 
         MailerSend ms = new MailerSend();
