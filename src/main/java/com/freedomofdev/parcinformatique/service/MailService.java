@@ -193,14 +193,14 @@ public class MailService {
 
         email.setFrom("Freedom Of Dev Services", mailDomain);
 
-        email.subject = "Votre demande d'acquisition a été aceptée";
+        email.subject = "Votre demande d'acquisition a été acceptée";
 
         Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
 
         email.AddRecipient(recipient);
 
         email.setTemplateId("7dnvo4d6d3xg5r86");
-        String etat = "Votre demande d'acquisition avec la référence " + demandeAcquisition.getReference() + " a été aceptée.";
+        String etat = "Votre demande d'acquisition avec la référence " + demandeAcquisition.getReference() + " a été acceptée.";
         email.AddVariable("etat", etat);
 
         MailerSend ms = new MailerSend();
