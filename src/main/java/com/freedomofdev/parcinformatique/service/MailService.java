@@ -63,7 +63,7 @@ public class MailService {
         Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
 
         email.AddRecipient(recipient);
-        email.setTemplateId("7dnvo4d6d3xg5r86");
+        email.setTemplateId("zr6ke4n5mwv4on12");
         String etat = "Votre demande de réparation " + String.valueOf(demandeReparation.getReference()) + " pour l'actif "+  String.valueOf(demandeReparation.getActif().getNom())+ " a été acceptée. Nous allons nous occuper de votre demande dans les plus brefs délais.";
         email.AddVariable( "etat", etat);
 
@@ -90,7 +90,7 @@ public class MailService {
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("7dnvo4d6d3xg5r86");
+        email.setTemplateId("zr6ke4n5mwv4on12");
         String etat = "Votre demande de réparation " + String.valueOf(demandeReparation.getReference()) + " pour l'actif "+  String.valueOf(demandeReparation.getActif().getNom())+ " a été refusée pour le motif suivant "+demandeReparation.getMotifRejet();
         email.AddVariable( "etat", etat);
 
@@ -116,7 +116,7 @@ public class MailService {
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("7dnvo4d6d3xg5r86");
+        email.setTemplateId("zr6ke4n5mwv4on12");
         String etat = "Votre actif "+ String.valueOf(demandeReparation.getActif().getNom())+ " concerné par la demande de réparation " + String.valueOf(demandeReparation.getReference()) + " a été réparé avec succès. Vous pouvez maintenant le récupérer.";
         email.AddVariable( "etat", etat);
         MailerSend ms = new MailerSend();
@@ -143,7 +143,7 @@ public class MailService {
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("7dnvo4d6d3xg5r86");
+        email.setTemplateId("zr6ke4n5mwv4on12");
         String etat = "Votre actif "+ String.valueOf(demandeReparation.getActif().getNom())+ " concerné par la demande de réparation " + String.valueOf(demandeReparation.getReference()) + " n'a pas pu etre réparé. Vous pouvez nous contacter pour demander l'acquisition d'un nouvel actif.";
         email.AddVariable( "etat", etat);
 
@@ -171,7 +171,7 @@ public class MailService {
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("7dnvo4d6d3xg5r86");
+        email.setTemplateId("zr6ke4n5mwv4on12");
         String etat = "La demande de réparation " + String.valueOf(demandeReparation.getReference()) + " pour l'actif "+  String.valueOf(demandeReparation.getActif().getNom())+ " est en retard. Merci de prendre les mesures nécessaires.";
         email.AddVariable( "etat", etat);
 
@@ -199,7 +199,7 @@ public class MailService {
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("7dnvo4d6d3xg5r86");
+        email.setTemplateId("zr6ke4n5mwv4on12");
         String etat = "Votre demande d'acquisition avec la référence " + demandeAcquisition.getReference() + " a été acceptée.";
         email.AddVariable("etat", etat);
 
@@ -225,7 +225,7 @@ public class MailService {
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("7dnvo4d6d3xg5r86");
+        email.setTemplateId("zr6ke4n5mwv4on12");
         String etat = "Votre demande d'acquisition avec la référence " + demandeAcquisition.getReference() + " a été rejetée pour le motif suivant: " + demandeAcquisition.getRejectionReason();
         email.AddVariable("etat", etat);
 
@@ -251,7 +251,7 @@ public class MailService {
 
         email.AddRecipient(recipient);
 
-        email.setTemplateId("7dnvo4d6d3xg5r86");
+        email.setTemplateId("zr6ke4n5mwv4on12");
         String etat = "Votre demande d'acquisition avec la référence " + demandeAcquisition.getReference() + " est cloturée avec succès. Vous pouvez récuperer votre actif.";
         email.AddVariable("etat", etat);
 
