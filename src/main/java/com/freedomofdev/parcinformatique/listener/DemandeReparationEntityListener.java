@@ -4,14 +4,16 @@ import com.freedomofdev.parcinformatique.entity.DemandeReparation;
 
 import jakarta.persistence.PostPersist;
 
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DemandeReparationEntityListener {
 
     @PostPersist
     public void postPersist(DemandeReparation demandeReparation) {
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        String reference = "REP" + year + "-" + demandeReparation.getId();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(new Date());
+        String reference = "FOD-REP-" + date + "-" + demandeReparation.getId();
         demandeReparation.setReference(reference);
     }
 }

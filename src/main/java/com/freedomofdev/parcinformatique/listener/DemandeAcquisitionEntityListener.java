@@ -4,14 +4,16 @@ import com.freedomofdev.parcinformatique.entity.DemandeAcquisition;
 
 import jakarta.persistence.PostPersist;
 
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DemandeAcquisitionEntityListener {
 
     @PostPersist
     public void postPersist(DemandeAcquisition demandeAcquisition) {
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        String reference = "ACQ" + year + "-" + demandeAcquisition.getId();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(new Date());
+        String reference = "FOD-ACQ-" + date + "-" + demandeAcquisition.getId();
         demandeAcquisition.setReference(reference);
     }
 }
