@@ -100,6 +100,21 @@ public class DemandeAcquisitionService {
                 .orElseThrow(() -> new ResourceNotFoundException("DemandeAcquisition", "id", id));
     }
 
+    @Transactional
+    public DemandeAcquisition notifyProblemAcquiringActif(Long id) {
+        return demandeAcquisitionRepository.findById(id)
+                .map(existingDemandeAcquisition -> {
+                    existingDemandeAcquisition.setStatus(DemandeAcquisition.Status.DONE);
+                    DemandeAcquisition updatedDemandeAcquisition = demandeAcquisitionRepository.save(existingDemandeAcquisition);
+
+                    // Send problem notification email
+                    mailService.sendProblemAcquiringActifEmail(updatedDemandeAcquisition.getAcquisitionRequestedBy(), updatedDemandeAcquisition);
+
+                    return updatedDemandeAcquisition;
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("DemandeAcquisition", "id", id));
+    }
+
     @Transactional(readOnly = true)
     public List<DemandeAcquisition> getAllDemandeAcquisitions() {
         List<DemandeAcquisition> demandeAcquisitions = demandeAcquisitionRepository.findAll();

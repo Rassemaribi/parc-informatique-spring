@@ -64,4 +64,11 @@ public class DemandeAcquisitionController {
         DemandeAcquisition demandeAcquisition = demandeAcquisitionService.getDemandeAcquisitionById(id);
         return ResponseEntity.ok(demandeAcquisition);
     }
+
+    @PreAuthorize("hasRole('DSI')")
+    @PutMapping("/notifyProblem/{id}")
+    public ResponseEntity<DemandeAcquisition> notifyProblemAcquiringActif(@PathVariable Long id) {
+        DemandeAcquisition notifiedDemandeAcquisition = demandeAcquisitionService.notifyProblemAcquiringActif(id);
+        return ResponseEntity.ok(notifiedDemandeAcquisition);
+    }
 }

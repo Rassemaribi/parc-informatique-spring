@@ -265,4 +265,30 @@ public class MailService {
             e.printStackTrace();
         }
     }
+
+    public void sendProblemAcquiringActifEmail(User user, DemandeAcquisition demandeAcquisition) {
+        Email email = new Email();
+
+        email.setFrom("Freedom Of Dev Services", mailDomain);
+
+        email.subject = "Problème lors de l'acquisition de l'actif";
+
+        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+
+        email.AddRecipient(recipient);
+
+        email.setTemplateId("7dnvo4d6d3xg5r86");
+        String etat = "Nous avons un problème lors de l'acquisition de l'actif pour la demande d'acquisition avec la référence " + demandeAcquisition.getReference() + " pour un problème logistique. Nous vous tiendrons informé de l'évolution de la situation.";
+        email.AddVariable("etat", etat);
+
+        MailerSend ms = new MailerSend();
+        ms.setToken(mailerSendApiKey);
+
+        try {
+            MailerSendResponse response = ms.emails().send(email);
+            System.out.println(response.messageId);
+        } catch (MailerSendException e) {
+            e.printStackTrace();
+        }
+    }
 }
