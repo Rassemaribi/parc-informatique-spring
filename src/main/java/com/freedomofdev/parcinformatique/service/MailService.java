@@ -291,4 +291,31 @@ public class MailService {
             e.printStackTrace();
         }
     }
+
+    public void sendEmailToDSI(String message) {
+        Email email = new Email();
+
+        email.setFrom("Freedom Of Dev Services", mailDomain);
+
+        email.subject = "Notification de pannes récurrentes";
+
+        // Assuming the DSI's email is stored in a variable called dsiEmail
+        Recipient recipient = new Recipient("DSI", "fares_masmoudi@yahoo.fr");
+
+        email.AddRecipient(recipient);
+
+        // Assuming you have a template for this kind of notification
+        email.setTemplateId("7dnvo4d6d3xg5r86");
+        email.AddVariable("etat", message);
+
+        MailerSend ms = new MailerSend();
+        ms.setToken(mailerSendApiKey);
+
+        try {
+            MailerSendResponse response = ms.emails().send(email);
+            System.out.println(response.messageId);
+        } catch (MailerSendException e) {
+            e.printStackTrace();
+        }
+    }
 }

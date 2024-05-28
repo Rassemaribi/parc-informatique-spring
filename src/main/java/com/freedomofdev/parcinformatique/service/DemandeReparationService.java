@@ -209,4 +209,13 @@ public class DemandeReparationService {
             }
         }
     }
+
+    public double getAverageCountByActifReference() {
+        List<Object[]> counts = demandeReparationRepository.getCountsByActifReference();
+        return counts.stream()
+                .filter(val -> val.length > 1)
+                .mapToLong(val -> ((Long) val[1]))
+                .average()
+                .orElse(0.0);
+    }
 }

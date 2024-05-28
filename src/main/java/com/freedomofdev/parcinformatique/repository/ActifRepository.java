@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface ActifRepository extends JpaRepository<Actif, Long> {
     @EntityGraph(attributePaths = {"demandesReparation"})
     Optional<Actif> findById(Long id);
+
+    Actif findFirstByReference(String reference);
 }
