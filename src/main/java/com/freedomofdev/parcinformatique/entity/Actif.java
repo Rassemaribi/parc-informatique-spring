@@ -46,6 +46,10 @@ public class Actif {
     @Column(nullable = false)
     private boolean partage;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "date_assignation")
+    private Date dateAssignation;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "assigned_user_id")

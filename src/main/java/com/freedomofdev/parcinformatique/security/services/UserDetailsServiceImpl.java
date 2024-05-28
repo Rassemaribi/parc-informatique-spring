@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,6 +72,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         actif.setAssignedUser(user);
 
         actif.setEtat(Etat.ASSIGNED);
+        actif.setDateAssignation(new Date());
+
 
         // Save the new user and the Actif to the database
         userRepository.save(user);
