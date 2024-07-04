@@ -1,69 +1,70 @@
-# Ce workflow va construire un projet Java et le déployer sur une Azure Functions App sur Windows ou Linux lorsqu'un commit est poussé vers votre branche par défaut.
-#
-# Ce workflow suppose que vous avez déjà créé l'application Azure Functions cible.
-# Pour les instructions, voir https://learn.microsoft.com/en-us/azure/azure-functions/create-first-function-vs-code-java
-#
-# Pour configurer ce workflow :
-# 1. Configurez les secrets suivants dans votre dépôt :
-#   - AZURE_FUNCTIONAPP_PUBLISH_PROFILE
-# 2. Modifiez les variables d'environnement pour votre configuration.
-#
-# Pour plus d'informations sur :
-#   - GitHub Actions pour Azure : https://github.com/Azure/Actions
-#   - Azure Functions Action : https://github.com/Azure/functions-action
-#   - Publish Profile : https://github.com/Azure/functions-action#using-publish-profile-as-deployment-credential-recommended
-#   - Azure Service Principal pour RBAC : https://github.com/Azure/functions-action#using-azure-service-principal-for-rbac-as-deployment-credential
-#
-# Pour plus d'exemples pour démarrer avec les workflows GitHub Actions pour déployer sur Azure : https://github.com/Azure/actions-workflow-samples/tree/master/FunctionApp
+# Docs pour l'action de déploiement d'Azure Web Apps : https://github.com/Azure/webapps-deploy
+# Plus d'Actions GitHub pour Azure : https://github.com/Azure/actions
 
-name: Déployer un projet Java sur Azure Function App
+name: Build and deploy JAR app to Azure Web App - parcinformatiquefodservice
 
 on:
   push:
-    branches: ["main"]
-
-env:
-  AZURE_FUNCTIONAPP_NAME: 'your-app-name'   # définissez ceci sur le nom de votre application fonction sur Azure
-  POM_XML_DIRECTORY: '.'                    # définissez ceci sur le répertoire contenant le fichier pom.xml
-  JAVA_VERSION: '8'                         # définissez ceci sur la version de Java à utiliser (par exemple, '8', '11', '17')
+    branches:
+      - racem
+  workflow_dispatch:
 
 jobs:
-  build-and-deploy:
-    runs-on: windows-latest # Pour Linux, utilisez ubuntu-latest
-    environment: dev
+  build:
+    runs-on: windows-latest
+
     steps:
-    - name: 'Checkout GitHub Action'
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    # Si vous souhaitez utiliser Azure RBAC au lieu de Publish Profile, alors décommentez la tâche ci-dessous
-    # - name: 'Login via Azure CLI'
-    #   uses: azure/login@v1
-    #   with:
-    #     creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }} # configurez les secrets AZURE_RBAC_CREDENTIALS dans votre dépôt
+      - name: Set up Java version
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
 
-    - name: Configurer Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
+      - name: Build with Maven
+        run: mvn clean install
 
-    - name: Setup Java Sdk ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'temurin'
-        java-version: ${{ env.JAVA_VERSION }}
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: java-app
+          path: '${{ github.workspace }}/target/*.jar'
 
-    - name: 'Restore Project Dependencies Using Mvn'
-      shell: pwsh # Pour Linux, utilisez bash
-      run: |
-        pushd './${{ env.POM_XML_DIRECTORY }}'
-        mvn clean package
-        popd
+      - name: Upload Surefire reports
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: surefire-reports
+          path: '${{ github.workspace }}/target/surefire-reports'
 
-    - name: 'Run Azure Functions Action'
-      uses: Azure/functions-action@v1
-      id: fa
-      with:
-        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        package: '${{ env.POM_XML_DIRECTORY }}' # s'il y a plusieurs applications fonction dans le même projet, alors ce chemin sera comme './${{ env.POM_XML_DIRECTORY }}/target/azure-functions/${{ env.POM_FUNCTIONAPP_NAME }}'
-        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }} # Supprimez publish-profile pour utiliser Azure RBAC
-        respect-pom-xml: true
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    if: success()
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write # Ceci est nécessaire pour demander le JWT
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: java-app
+      
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4C35AF22B739411B944697CA47D1B4AE }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C044F8FC705C4C7DB6DA94FBA30B0CD0 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CAFB13AD0F7342388B6550CDF5CEA77B }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'parcinformatiquefodservice'
+          slot-name: 'Production'
+          package: '*.jar'
