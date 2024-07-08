@@ -1,4 +1,4 @@
-package com.freedomofdev.parcinformatique.security.services;
+package com.freedomofdev.parcinformatique.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.freedomofdev.parcinformatique.entity.User;

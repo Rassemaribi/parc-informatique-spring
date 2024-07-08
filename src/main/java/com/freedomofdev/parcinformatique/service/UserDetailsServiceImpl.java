@@ -1,4 +1,4 @@
-package com.freedomofdev.parcinformatique.security.services;
+package com.freedomofdev.parcinformatique.service;
 
 import com.freedomofdev.parcinformatique.dto.UserDto;
 import com.freedomofdev.parcinformatique.entity.Actif;

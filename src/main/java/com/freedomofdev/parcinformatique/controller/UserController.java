@@ -2,7 +2,7 @@ package com.freedomofdev.parcinformatique.controller;
 
 import com.freedomofdev.parcinformatique.dto.UserDto;
 import com.freedomofdev.parcinformatique.entity.User;
-import com.freedomofdev.parcinformatique.security.services.UserDetailsServiceImpl;
+import com.freedomofdev.parcinformatique.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
