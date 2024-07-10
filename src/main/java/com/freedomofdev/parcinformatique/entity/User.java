@@ -28,18 +28,9 @@ public class User {
     private Long id;
 
     @NotBlank
-    @Size(max = 20)
-    private String username;
-
-    @NotBlank
     @Size(max = 50)
     @Email
     private String email;
-
-    @NotBlank
-    @JsonIgnore
-    @Size(max = 120)
-    private String password;
 
     @NotBlank
     @Size(max = 50)
@@ -85,9 +76,7 @@ public class User {
     }
 
     public User(String username, String email, String password, String nom, String prenom, String numeroTelephone) {
-        this.username = username;
         this.email = email;
-        this.password = password;
         this.nom = nom;
         this.prenom = prenom;
         this.numeroTelephone = numeroTelephone;
@@ -97,7 +86,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
@@ -113,13 +101,6 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getEmail() {
         return email;
@@ -129,13 +110,6 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public Set<Role> getRoles() {
         return roles;

@@ -7,51 +7,36 @@ import com.freedomofdev.parcinformatique.enums.Etat;
 import com.freedomofdev.parcinformatique.repository.ActifRepository;
 import com.freedomofdev.parcinformatique.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
     @Autowired
     private ActifRepository actifRepository;
 
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-
-        return UserDetailsImpl.build(user);
-    }
-
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    public String getUserNomById(Long id) {
-        User user = userRepository.findById(id).orElse(null);
-        return user != null ? user.getNom() : null;
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
-    public String getUserPrenomById(Long id) {
-        User user = userRepository.findById(id).orElse(null);
-        return user != null ? user.getPrenom() : null;
-    }
-
-    public String getUserNumeroTelephoneById(Long id) {
-        User user = userRepository.findById(id).orElse(null);
-        return user != null ? user.getNumeroTelephone() : null;
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     @Transactional
@@ -110,7 +95,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserDto convertToDto(User user) {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
-        dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
         dto.setNom(user.getNom());
         dto.setPrenom(user.getPrenom());
