@@ -13,5 +13,5 @@ public class UserDto {
     private String prenom;
     private String numeroTelephone;
     private List<Actif> assignedActifs;
-    private List<String> roles;
+    private List<String> userGroups;
 }

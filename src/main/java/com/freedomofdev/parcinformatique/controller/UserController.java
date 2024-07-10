@@ -2,7 +2,7 @@ package com.freedomofdev.parcinformatique.controller;
 
 import com.freedomofdev.parcinformatique.dto.UserDto;
 import com.freedomofdev.parcinformatique.entity.User;
-import com.freedomofdev.parcinformatique.service.UserServiceImpl;
+import com.freedomofdev.parcinformatique.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -18,21 +17,7 @@ import java.util.Optional;
 @RequestMapping("/api/users")
 public class UserController {
     @Autowired
-    private UserServiceImpl userService;
-
-    @PostMapping("/createUser")
-    public ResponseEntity<?> createUser(@RequestBody String email) {
-        Optional<User> userData = userService.findByEmail(email);
-
-        if (userData.isPresent()) {
-            return new ResponseEntity<>(userData.get(), HttpStatus.OK);
-        } else {
-            User _user = new User();
-            _user.setEmail(email);
-            userService.save(_user);
-            return new ResponseEntity<>(_user, HttpStatus.CREATED);
-        }
-    }
+    private UserService userService;
 
     @PreAuthorize("hasRole('DSI') OR hasRole('COLLABORATEUR')")
     @GetMapping("/{id}")
