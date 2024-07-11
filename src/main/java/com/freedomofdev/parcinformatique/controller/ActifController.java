@@ -22,28 +22,24 @@ public class ActifController {
         this.actifService = actifService;
     }
 
-    @PreAuthorize("hasRole('DSI')")
     @PostMapping("/batch")
     public ResponseEntity<List<Actif>> createActifs(@RequestBody List<Actif> actifs, @RequestParam Long id) {
         List<Actif> createdActifs = actifService.createActifs(actifs, id);
         return new ResponseEntity<>(createdActifs, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('DSI')")
     @GetMapping
     public ResponseEntity<List<Actif>> getAllActifs() {
         List<Actif> actifs = actifService.getAllActifs();
         return new ResponseEntity<>(actifs, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('DSI')")
     @GetMapping("/{id}")
     public ResponseEntity<Actif> getActifById(@PathVariable Long id) {
         Actif actif = actifService.getActifById(id);
         return new ResponseEntity<>(actif, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('DSI')")
     @PutMapping("/{id}")
     public ResponseEntity<Actif> updateActif(@PathVariable Long id, @RequestBody Actif actif) {
         actif.setId(id);
@@ -52,7 +48,6 @@ public class ActifController {
         return new ResponseEntity<>(updatedActif, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('DSI')")
     @PutMapping("/archive/{id}")
     public ResponseEntity<Actif> archiveActif(@PathVariable Long id) {
         Actif archivedActif = actifService.archiveActif(id);

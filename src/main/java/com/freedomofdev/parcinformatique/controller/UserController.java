@@ -19,35 +19,30 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PreAuthorize("hasRole('DSI') OR hasRole('COLLABORATEUR')")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('DSI')")
     @PostMapping("/{userId}/assignActif/{actifId}")
     public ResponseEntity<?> assignActifToUser(@PathVariable Long userId, @PathVariable Long actifId) {
         userService.assignActifToUser(userId, actifId);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('DSI')")
     @DeleteMapping("/{userId}/removeActif/{actifId}")
     public ResponseEntity<?> removeActifFromUser(@PathVariable Long userId, @PathVariable Long actifId) {
         userService.removeActifFromUser(userId, actifId);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('DSI')")
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
-
-    @PreAuthorize("hasRole('DSI')")
+    
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserAndUnassignActifs(@PathVariable Long userId) {
         userService.deleteUserAndUnassignActifs(userId);
