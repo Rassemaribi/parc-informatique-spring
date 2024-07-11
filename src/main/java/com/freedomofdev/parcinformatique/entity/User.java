@@ -45,12 +45,12 @@ public class User {
     private String numeroTelephone;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "assignedUser",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "assignedUser")
     private List<Actif> assignedActifs = new ArrayList<>();
 
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "createdByDSI", cascade = CascadeType.ALL)
-    private List<Actif> createdActifs = new ArrayList<>();
+    @OneToMany(mappedBy = "createdByDSI")
+    private List<Actif> createdActifs = new ArrayList<>() ;
 
     @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "acquisitionRequestedBy")
@@ -68,13 +68,6 @@ public class User {
 
     @ElementCollection
     private List<String> userGroups;
-
-    public User(String username, String email, String password, String nom, String prenom, String numeroTelephone) {
-        this.email = email;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.numeroTelephone = numeroTelephone;
-    }
 
     @Override
     public String toString() {

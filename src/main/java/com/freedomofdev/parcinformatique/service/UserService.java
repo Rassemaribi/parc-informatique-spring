@@ -3,11 +3,14 @@ package com.freedomofdev.parcinformatique.service;
 import com.freedomofdev.parcinformatique.dto.AuthRequest;
 import com.freedomofdev.parcinformatique.dto.UserDto;
 import com.freedomofdev.parcinformatique.entity.Actif;
+import com.freedomofdev.parcinformatique.entity.DemandeAcquisition;
+import com.freedomofdev.parcinformatique.entity.DemandeReparation;
 import com.freedomofdev.parcinformatique.entity.User;
 import com.freedomofdev.parcinformatique.enums.Etat;
 import com.freedomofdev.parcinformatique.repository.ActifRepository;
 import com.freedomofdev.parcinformatique.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,20 +36,91 @@ public class UserService {
         String email = authRequest.getEmail();
         List<String> groups = authRequest.getGroups();
 
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
+        UserDto userDto = this.findByEmail(email);
+        User user;
+        if (userDto == null) {
             user = new User();
             user.setEmail(email);
             user.setUserGroups(groups);
-            userRepository.save(user);
+        } else {
+            user = convertToEntity(userDto);
+            user.setUserGroups(groups); // Update the groups if the user already exists
         }
+        userRepository.save(user); // Save the user after the groups are added
+        return user;
+    }
+
+    public User convertToEntity(UserDto dto) {
+        User user = new User();
+        user.setId(dto.getId());
+        user.setEmail(dto.getEmail());
+        user.setNom(dto.getNom());
+        user.setPrenom(dto.getPrenom());
+        user.setNumeroTelephone(dto.getNumeroTelephone());
+        user.setAssignedActifs(dto.getAssignedActifs());
+        user.setCreatedActifs(dto.getCreatedActifs());
+        user.setDemandesAcquisitionCollaborateur(dto.getDemandesAcquisitionCollaborateur());
+        user.setDemandesAcquisitionDSI(dto.getDemandesAcquisitionDSI());
+        user.setDemandesReparationCollaborateur(dto.getDemandesReparationCollaborateur());
+        user.setDemandesReparationDSI(dto.getDemandesReparationDSI());
+        user.setUserGroups(dto.getUserGroups());
         return user;
     }
 
     @Transactional
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public UserDto findByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new RuntimeException("Error: User is not found.");
+        }
+
+        // Fetch the collections separately in different transactions
+        user.setAssignedActifs(getAssignedActifs(user.getId()));
+        user.setCreatedActifs(getCreatedActifs(user.getId()));
+        user.setDemandesAcquisitionCollaborateur(getDemandesAcquisitionCollaborateur(user.getId()));
+        user.setDemandesAcquisitionDSI(getDemandesAcquisitionDSI(user.getId()));
+        user.setDemandesReparationCollaborateur(getDemandesReparationCollaborateur(user.getId()));
+        user.setDemandesReparationDSI(getDemandesReparationDSI(user.getId()));
+
+        return convertToDto(user);
     }
+
+    @Transactional
+    public List<Actif> getAssignedActifs(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Error: User is not found."));
+        return new ArrayList<>(user.getAssignedActifs());
+    }
+
+    @Transactional
+    public List<Actif> getCreatedActifs(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Error: User is not found."));
+        return new ArrayList<>(user.getCreatedActifs());
+    }
+
+    @Transactional
+    public List<DemandeAcquisition> getDemandesAcquisitionCollaborateur(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Error: User is not found."));
+        return new ArrayList<>(user.getDemandesAcquisitionCollaborateur());
+    }
+
+    @Transactional
+    public List<DemandeAcquisition> getDemandesAcquisitionDSI(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Error: User is not found."));
+        return new ArrayList<>(user.getDemandesAcquisitionDSI());
+    }
+
+    @Transactional
+    public List<DemandeReparation> getDemandesReparationCollaborateur(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Error: User is not found."));
+        return new ArrayList<>(user.getDemandesReparationCollaborateur());
+    }
+
+    @Transactional
+    public List<DemandeReparation> getDemandesReparationDSI(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Error: User is not found."));
+        return new ArrayList<>(user.getDemandesReparationDSI());
+    }
+
     @Transactional
     public User save(User user) {
         return userRepository.save(user);
@@ -113,6 +187,11 @@ public class UserService {
         dto.setPrenom(user.getPrenom());
         dto.setNumeroTelephone(user.getNumeroTelephone());
         dto.setAssignedActifs(new ArrayList<>(user.getAssignedActifs()));
+        dto.setCreatedActifs(new ArrayList<>(user.getCreatedActifs()));
+        dto.setDemandesAcquisitionCollaborateur(new ArrayList<>(user.getDemandesAcquisitionCollaborateur()));
+        dto.setDemandesAcquisitionDSI(new ArrayList<>(user.getDemandesAcquisitionDSI()));
+        dto.setDemandesReparationCollaborateur(new ArrayList<>(user.getDemandesReparationCollaborateur()));
+        dto.setDemandesReparationDSI(new ArrayList<>(user.getDemandesReparationDSI()));
         dto.setUserGroups(user.getUserGroups());
         return dto;
     }

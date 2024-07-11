@@ -50,12 +50,12 @@ public class Actif {
     @Column(name = "date_assignation")
     private Date dateAssignation;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "assigned_user_id")
     private User assignedUser;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "dsi_id")
     private User createdByDSI;
