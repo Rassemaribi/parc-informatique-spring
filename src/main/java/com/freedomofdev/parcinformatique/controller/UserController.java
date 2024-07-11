@@ -42,7 +42,7 @@ public class UserController {
         List<UserDto> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
-    
+
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserAndUnassignActifs(@PathVariable Long userId) {
         userService.deleteUserAndUnassignActifs(userId);

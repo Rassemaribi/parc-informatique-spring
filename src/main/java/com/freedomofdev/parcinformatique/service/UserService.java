@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,9 +70,15 @@ public class UserService {
 
     @Transactional
     public UserDto findByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new RuntimeException("Error: User is not found.");
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        User user;
+        if (userOptional.isPresent()) {
+            user = userOptional.get();
+        } else {
+            // Create a new user if a user with the provided email does not exist
+            user = new User();
+            user.setEmail(email);
+            userRepository.save(user);
         }
 
         // Fetch the collections separately in different transactions
@@ -88,37 +95,37 @@ public class UserService {
     @Transactional
     public List<Actif> getAssignedActifs(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Error: User is not found."));
-        return new ArrayList<>(user.getAssignedActifs());
+        return user.getAssignedActifs() != null ? new ArrayList<>(user.getAssignedActifs()) : new ArrayList<>();
     }
 
     @Transactional
     public List<Actif> getCreatedActifs(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Error: User is not found."));
-        return new ArrayList<>(user.getCreatedActifs());
+        return user.getCreatedActifs() != null ? new ArrayList<>(user.getCreatedActifs()) : new ArrayList<>();
     }
 
     @Transactional
     public List<DemandeAcquisition> getDemandesAcquisitionCollaborateur(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Error: User is not found."));
-        return new ArrayList<>(user.getDemandesAcquisitionCollaborateur());
+        return user.getDemandesAcquisitionCollaborateur() != null ? new ArrayList<>(user.getDemandesAcquisitionCollaborateur()) : new ArrayList<>();
     }
 
     @Transactional
     public List<DemandeAcquisition> getDemandesAcquisitionDSI(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Error: User is not found."));
-        return new ArrayList<>(user.getDemandesAcquisitionDSI());
+        return user.getDemandesAcquisitionDSI() != null ? new ArrayList<>(user.getDemandesAcquisitionDSI()) : new ArrayList<>();
     }
 
     @Transactional
     public List<DemandeReparation> getDemandesReparationCollaborateur(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Error: User is not found."));
-        return new ArrayList<>(user.getDemandesReparationCollaborateur());
+        return user.getDemandesReparationCollaborateur() != null ? new ArrayList<>(user.getDemandesReparationCollaborateur()) : new ArrayList<>();
     }
 
     @Transactional
     public List<DemandeReparation> getDemandesReparationDSI(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Error: User is not found."));
-        return new ArrayList<>(user.getDemandesReparationDSI());
+        return user.getDemandesReparationDSI() != null ? new ArrayList<>(user.getDemandesReparationDSI()) : new ArrayList<>();
     }
 
     @Transactional
