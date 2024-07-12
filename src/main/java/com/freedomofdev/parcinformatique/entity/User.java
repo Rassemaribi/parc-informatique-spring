@@ -66,7 +66,7 @@ public class User {
     @OneToMany(mappedBy = "reparationHandledBy")
     private List<DemandeReparation> demandesReparationDSI;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> userGroups;
 
     @Override
