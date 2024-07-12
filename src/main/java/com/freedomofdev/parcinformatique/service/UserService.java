@@ -37,15 +37,29 @@ public class UserService {
         String email = authRequest.getEmail();
         List<String> groups = authRequest.getGroups();
 
+        String[] nameParts = authRequest.getName().split(" ");
+        String prenom = nameParts[0];
+        String nom = nameParts.length > 1 ? nameParts[1] : "";
+
         UserDto userDto = this.findByEmail(email);
         User user;
         if (userDto == null) {
             user = new User();
             user.setEmail(email);
+            user.setPrenom(prenom);
+            user.setNom(nom);
             user.setUserGroups(groups);
         } else {
             user = convertToEntity(userDto);
             user.setUserGroups(groups); // Update the groups if the user already exists
+
+            // Update nom and prenom if they're null or empty
+            if (user.getNom() == null || user.getNom().isEmpty()) {
+                user.setNom(nom);
+            }
+            if (user.getPrenom() == null || user.getPrenom().isEmpty()) {
+                user.setPrenom(prenom);
+            }
         }
         userRepository.save(user); // Save the user after the groups are added
         return user;
@@ -57,7 +71,6 @@ public class UserService {
         user.setEmail(dto.getEmail());
         user.setNom(dto.getNom());
         user.setPrenom(dto.getPrenom());
-        user.setNumeroTelephone(dto.getNumeroTelephone());
         user.setAssignedActifs(dto.getAssignedActifs());
         user.setCreatedActifs(dto.getCreatedActifs());
         user.setDemandesAcquisitionCollaborateur(dto.getDemandesAcquisitionCollaborateur());
@@ -192,7 +205,6 @@ public class UserService {
         dto.setEmail(user.getEmail());
         dto.setNom(user.getNom());
         dto.setPrenom(user.getPrenom());
-        dto.setNumeroTelephone(user.getNumeroTelephone());
         dto.setAssignedActifs(new ArrayList<>(user.getAssignedActifs()));
         dto.setCreatedActifs(new ArrayList<>(user.getCreatedActifs()));
         dto.setDemandesAcquisitionCollaborateur(new ArrayList<>(user.getDemandesAcquisitionCollaborateur()));

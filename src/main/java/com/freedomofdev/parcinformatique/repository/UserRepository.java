@@ -12,15 +12,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
-    Boolean existsByEmail(String email);
-
-    Optional<User> findByNom(String nom);
-
-    Optional<User> findByPrenom(String prenom);
-
-    Optional<User> findByNumeroTelephone(String numeroTelephone);
-
-    @EntityGraph(attributePaths = {"demandesAcquisitionCollaborateur", "demandesAcquisitionDSI", "demandesReparationCollaborateur", "demandesReparationDSI", "createdActifs", "assignedActifs", "userGroups"})
+    @EntityGraph(attributePaths = {
+            "demandesAcquisitionCollaborateur",
+            "demandesAcquisitionDSI",
+            "demandesReparationCollaborateur",
+            "demandesReparationDSI",
+            "createdActifs",
+            "createdActifs.demandesReparation", // Eagerly fetch the demandesReparation collection of the createdActifs
+            "assignedActifs",
+            "assignedActifs.demandesReparation", // Eagerly fetch the demandesReparation collection of the assignedActifs
+            "userGroups"
+    })
     Optional<User> findById(Long id);
 
 }

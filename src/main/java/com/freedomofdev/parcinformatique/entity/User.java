@@ -40,10 +40,6 @@ public class User {
     @Size(max = 50)
     private String prenom;
 
-
-    @Size(max = 15)
-    private String numeroTelephone;
-
     @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "assignedUser")
     private List<Actif> assignedActifs = new ArrayList<>();
@@ -76,7 +72,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
-                ", numeroTelephone='" + numeroTelephone + '\'' +
                 '}';
     }
 }

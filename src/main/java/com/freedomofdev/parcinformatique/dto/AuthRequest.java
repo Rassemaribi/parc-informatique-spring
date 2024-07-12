@@ -8,5 +8,6 @@ import java.util.List;
 public class AuthRequest {
     private String token;
     private String email;
+    private String name;
     private List<String> groups;
 }
