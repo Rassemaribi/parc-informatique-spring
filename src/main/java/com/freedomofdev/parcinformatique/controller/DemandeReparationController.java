@@ -23,30 +23,35 @@ public class DemandeReparationController {
         return new ResponseEntity<>(createdDemandeReparation, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PutMapping("/accept/{id}")
     public ResponseEntity<DemandeReparation> acceptDemandeReparation(@PathVariable Long id, @RequestParam Long userId, @RequestParam Integer estimation) {
         DemandeReparation acceptedDemandeReparation = demandeReparationService.acceptDemandeReparation(id, userId, estimation);
         return ResponseEntity.ok(acceptedDemandeReparation);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PutMapping("/reject/{id}")
     public ResponseEntity<DemandeReparation> rejectDemandeReparation(@PathVariable Long id, @RequestParam String rejetMotif, @RequestParam Long userId) {
         DemandeReparation rejectedDemandeReparation = demandeReparationService.rejectDemandeReparation(id, rejetMotif, userId);
         return ResponseEntity.ok(rejectedDemandeReparation);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PutMapping("/finirSucces/{id}")
     public ResponseEntity<DemandeReparation> finirReparationAvecSucces(@PathVariable Long id) {
         DemandeReparation finishedDemandeReparation = demandeReparationService.finirReparationAvecSucces(id);
         return ResponseEntity.ok(finishedDemandeReparation);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PutMapping("/finirEchec/{id}")
     public ResponseEntity<DemandeReparation> finirReparationAvecEchec(@PathVariable Long id, @RequestParam Boolean archive) {
         DemandeReparation finishedDemandeReparation = demandeReparationService.finirReparationAvecEchec(id, archive);
         return ResponseEntity.ok(finishedDemandeReparation);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @GetMapping
     public ResponseEntity<List<DemandeReparation>> getAllDemandeReparations() {
         List<DemandeReparation> demandeReparations = demandeReparationService.getAllDemandeReparations();

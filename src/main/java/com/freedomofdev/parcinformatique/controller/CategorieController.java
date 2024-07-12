@@ -22,24 +22,28 @@ public class CategorieController {
         this.categorieService = categorieService;
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @GetMapping
     public ResponseEntity<List<Categorie>> getAllCategories() {
         List<Categorie> categories = categorieService.getAllCategories();
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @GetMapping("/{id}")
     public ResponseEntity<Categorie> getCategoryById(@PathVariable Long id) {
         Categorie categorie = categorieService.getCategoryById(id);
         return new ResponseEntity<>(categorie, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PostMapping
     public ResponseEntity<Categorie> createCategory(@RequestBody Categorie categorie) {
         Categorie createdCategorie = categorieService.createCategory(categorie);
         return new ResponseEntity<>(createdCategorie, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PutMapping("/{id}")
     public ResponseEntity<Categorie> updateCategory(@PathVariable Long id, @RequestBody Categorie categorie) {
         categorie.setId(id);
@@ -47,6 +51,7 @@ public class CategorieController {
         return new ResponseEntity<>(updatedCategorie, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         categorieService.deleteCategory(id);

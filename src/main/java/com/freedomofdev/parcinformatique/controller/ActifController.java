@@ -3,6 +3,7 @@ package com.freedomofdev.parcinformatique.controller;
 import com.freedomofdev.parcinformatique.entity.Actif;
 import com.freedomofdev.parcinformatique.service.ActifService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,12 +23,13 @@ public class ActifController {
         this.actifService = actifService;
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PostMapping("/batch")
     public ResponseEntity<List<Actif>> createActifs(@RequestBody List<Actif> actifs, @RequestParam Long id) {
         List<Actif> createdActifs = actifService.createActifs(actifs, id);
         return new ResponseEntity<>(createdActifs, HttpStatus.CREATED);
     }
-
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @GetMapping
     public ResponseEntity<List<Actif>> getAllActifs() {
         List<Actif> actifs = actifService.getAllActifs();
@@ -40,6 +42,7 @@ public class ActifController {
         return new ResponseEntity<>(actif, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PutMapping("/{id}")
     public ResponseEntity<Actif> updateActif(@PathVariable Long id, @RequestBody Actif actif) {
         actif.setId(id);
@@ -48,6 +51,7 @@ public class ActifController {
         return new ResponseEntity<>(updatedActif, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PutMapping("/archive/{id}")
     public ResponseEntity<Actif> archiveActif(@PathVariable Long id) {
         Actif archivedActif = actifService.archiveActif(id);

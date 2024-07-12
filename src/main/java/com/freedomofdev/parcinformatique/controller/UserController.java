@@ -25,24 +25,28 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PostMapping("/{userId}/assignActif/{actifId}")
     public ResponseEntity<?> assignActifToUser(@PathVariable Long userId, @PathVariable Long actifId) {
         userService.assignActifToUser(userId, actifId);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @DeleteMapping("/{userId}/removeActif/{actifId}")
     public ResponseEntity<?> removeActifFromUser(@PathVariable Long userId, @PathVariable Long actifId) {
         userService.removeActifFromUser(userId, actifId);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserAndUnassignActifs(@PathVariable Long userId) {
         userService.deleteUserAndUnassignActifs(userId);

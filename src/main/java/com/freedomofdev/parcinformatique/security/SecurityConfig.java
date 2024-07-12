@@ -19,8 +19,18 @@ public class SecurityConfig {
     @Value("${azure.ad.group.dsi}")
     private String dsiGroupId;
 
+    @Bean
+    public String dsiGroupId() {
+        return dsiGroupId;
+    }
+
     @Value("${azure.ad.group.collab}")
     private String collabGroupId;
+
+    @Bean
+    public String collabGroupId() {
+        return collabGroupId;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
