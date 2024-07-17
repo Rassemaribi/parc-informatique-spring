@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
-@CrossOrigin(origins = "https://parcinformatiquefodservices.azurewebsites.net", maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = "https://parcinformatiquefodservicess.azurewebsites.net", maxAge = 3600, allowCredentials = "true")
 @RequestMapping("/api/messages")
 public class ChatController {
 
