@@ -5,6 +5,7 @@ import com.freedomofdev.parcinformatique.entity.ChatMessage;
 import com.freedomofdev.parcinformatique.repository.ChatMessageRepository;
 import com.freedomofdev.parcinformatique.service.ChatMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -40,8 +41,9 @@ public class ChatController {
     }
 
 
-    @GetMapping("/{senderId}/{recipientId}")
-    public List<ChatMessage> fetchMessages(@PathVariable Long senderId, @PathVariable Long recipientId) {
-        return chatMessageService.fetchMessages(senderId, recipientId);
+    @GetMapping("/{senderId}/{receiverId}")
+    public ResponseEntity<List<ChatMessage>> fetchMessages(@PathVariable Long senderId, @PathVariable Long receiverId) {
+        List<ChatMessage> messages = chatMessageService.fetchMessages(senderId, receiverId);
+        return ResponseEntity.ok(messages);
     }
 }
