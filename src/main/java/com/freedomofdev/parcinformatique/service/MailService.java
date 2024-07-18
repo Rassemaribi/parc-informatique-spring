@@ -29,14 +29,12 @@ public class MailService {
 
         email.subject = "Bienvenue au parc informatique";
 
-        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+        Recipient recipient = new Recipient(null, user.getEmail());
 
         email.AddRecipient(recipient);
 
         email.setTemplateId("ynrw7gyv13kg2k8e");
         email.AddVariable("prenom", user.getPrenom());
-        email.AddVariable("username", user.getUsername());
-        email.AddVariable("password", user.getPassword());
 
 
         MailerSend ms = new MailerSend();
@@ -60,7 +58,7 @@ public class MailService {
 
         email.subject = "Votre demande de réparation a été acceptée";
 
-        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+        Recipient recipient = new Recipient(null, user.getEmail());
 
         email.AddRecipient(recipient);
         email.setTemplateId("7dnvo4d6d3xg5r86");
@@ -86,7 +84,7 @@ public class MailService {
 
         email.subject = "Votre demande de réparation a été rejetée";
 
-        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+        Recipient recipient = new Recipient(null, user.getEmail());
 
         email.AddRecipient(recipient);
 
@@ -112,7 +110,7 @@ public class MailService {
 
         email.subject = "Votre réparation a été effectuée avec succès";
 
-        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+        Recipient recipient = new Recipient(null, user.getEmail());
 
         email.AddRecipient(recipient);
 
@@ -139,7 +137,7 @@ public class MailService {
 
         email.subject = "Votre réparation n'a pas pu être effectuée";
 
-        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+        Recipient recipient = new Recipient(null, user.getEmail());
 
         email.AddRecipient(recipient);
 
@@ -167,7 +165,7 @@ public class MailService {
 
         email.subject = "Rappel: Demande de réparation en retard";
 
-        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+        Recipient recipient = new Recipient(null, user.getEmail());
 
         email.AddRecipient(recipient);
 
@@ -195,7 +193,7 @@ public class MailService {
 
         email.subject = "Votre demande d'acquisition a été acceptée";
 
-        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+        Recipient recipient = new Recipient(null, user.getEmail());
 
         email.AddRecipient(recipient);
 
@@ -221,7 +219,7 @@ public class MailService {
 
         email.subject = "Votre demande d'acquisition a été rejetée";
 
-        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+        Recipient recipient = new Recipient(null, user.getEmail());
 
         email.AddRecipient(recipient);
 
@@ -247,7 +245,7 @@ public class MailService {
 
         email.subject = "Votre demande d'acquisition est cloturée avec succès";
 
-        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+        Recipient recipient = new Recipient(null, user.getEmail());
 
         email.AddRecipient(recipient);
 
@@ -273,7 +271,7 @@ public class MailService {
 
         email.subject = "Problème lors de l'acquisition de l'actif";
 
-        Recipient recipient = new Recipient(user.getUsername(), user.getEmail());
+        Recipient recipient = new Recipient(null, user.getEmail());
 
         email.AddRecipient(recipient);
 

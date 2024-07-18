@@ -6,13 +6,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
+
 @Entity(name = "actifs")
 @Data
 @NoArgsConstructor
@@ -50,12 +49,12 @@ public class Actif {
     @Column(name = "date_assignation")
     private Date dateAssignation;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "assigned_user_id")
     private User assignedUser;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "dsi_id")
     private User createdByDSI;

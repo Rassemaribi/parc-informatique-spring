@@ -11,62 +11,59 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = "https://parcinformatiquefodservicess.azurewebsites.net", maxAge = 3600, allowCredentials = "true")
 @RequestMapping("/api/demandeReparation")
 public class DemandeReparationController {
     @Autowired
     private DemandeReparationService demandeReparationService;
 
-    @PreAuthorize("hasRole('COLLABORATEUR') OR hasRole('DSI')")
     @PostMapping
     public ResponseEntity<DemandeReparation> createDemandeReparation(@RequestBody DemandeReparation demandeReparation) {
         DemandeReparation createdDemandeReparation = demandeReparationService.createDemandeReparation(demandeReparation);
         return new ResponseEntity<>(createdDemandeReparation, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('DSI')")
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PutMapping("/accept/{id}")
     public ResponseEntity<DemandeReparation> acceptDemandeReparation(@PathVariable Long id, @RequestParam Long userId, @RequestParam Integer estimation) {
         DemandeReparation acceptedDemandeReparation = demandeReparationService.acceptDemandeReparation(id, userId, estimation);
         return ResponseEntity.ok(acceptedDemandeReparation);
     }
 
-    @PreAuthorize("hasRole('DSI')")
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PutMapping("/reject/{id}")
     public ResponseEntity<DemandeReparation> rejectDemandeReparation(@PathVariable Long id, @RequestParam String rejetMotif, @RequestParam Long userId) {
         DemandeReparation rejectedDemandeReparation = demandeReparationService.rejectDemandeReparation(id, rejetMotif, userId);
         return ResponseEntity.ok(rejectedDemandeReparation);
     }
 
-    @PreAuthorize("hasRole('DSI')")
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PutMapping("/finirSucces/{id}")
     public ResponseEntity<DemandeReparation> finirReparationAvecSucces(@PathVariable Long id) {
         DemandeReparation finishedDemandeReparation = demandeReparationService.finirReparationAvecSucces(id);
         return ResponseEntity.ok(finishedDemandeReparation);
     }
 
-    @PreAuthorize("hasRole('DSI')")
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PutMapping("/finirEchec/{id}")
     public ResponseEntity<DemandeReparation> finirReparationAvecEchec(@PathVariable Long id, @RequestParam Boolean archive) {
         DemandeReparation finishedDemandeReparation = demandeReparationService.finirReparationAvecEchec(id, archive);
         return ResponseEntity.ok(finishedDemandeReparation);
     }
 
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @GetMapping
-    @PreAuthorize("hasRole('DSI')")
     public ResponseEntity<List<DemandeReparation>> getAllDemandeReparations() {
         List<DemandeReparation> demandeReparations = demandeReparationService.getAllDemandeReparations();
         return new ResponseEntity<>(demandeReparations, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('COLLABORATEUR') OR hasRole('DSI')")
     @GetMapping("/users/{userId}")
     public ResponseEntity<List<DemandeReparation>> getDemandesReparationByUserId(@PathVariable Long userId) {
         List<DemandeReparation> demandesReparation = demandeReparationService.getDemandesReparationByUserId(userId);
         return ResponseEntity.ok(demandesReparation);
     }
 
-    @PreAuthorize("hasRole('DSI') OR hasRole('COLLABORATEUR')")
     @GetMapping("/{id}")
     public ResponseEntity<DemandeReparation> getDemandeReparationById(@PathVariable Long id) {
         DemandeReparation demandeReparation = demandeReparationService.getDemandeReparationById(id);

@@ -10,19 +10,19 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email);
 
-    Boolean existsByUsername(String username);
-
-    Boolean existsByEmail(String email);
-
-    Optional<User> findByNom(String nom);
-
-    Optional<User> findByPrenom(String prenom);
-
-    Optional<User> findByNumeroTelephone(String numeroTelephone);
-
-    @EntityGraph(attributePaths = {"demandesAcquisitionCollaborateur", "demandesAcquisitionDSI", "demandesReparationCollaborateur", "demandesReparationDSI", "createdActifs", "assignedActifs", "roles"})
+    @EntityGraph(attributePaths = {
+            "demandesAcquisitionCollaborateur",
+            "demandesAcquisitionDSI",
+            "demandesReparationCollaborateur",
+            "demandesReparationDSI",
+            "createdActifs",
+            "createdActifs.demandesReparation", // Eagerly fetch the demandesReparation collection of the createdActifs
+            "assignedActifs",
+            "assignedActifs.demandesReparation", // Eagerly fetch the demandesReparation collection of the assignedActifs
+            "userGroups"
+    })
     Optional<User> findById(Long id);
 
 }

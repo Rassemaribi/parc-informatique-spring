@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = "https://parcinformatiquefodservicess.azurewebsites.net", maxAge = 3600, allowCredentials = "true")
 @RequestMapping("/api/actifs")
 public class ActifController {
 
@@ -22,28 +22,26 @@ public class ActifController {
         this.actifService = actifService;
     }
 
-    @PreAuthorize("hasRole('DSI')")
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PostMapping("/batch")
     public ResponseEntity<List<Actif>> createActifs(@RequestBody List<Actif> actifs, @RequestParam Long id) {
         List<Actif> createdActifs = actifService.createActifs(actifs, id);
         return new ResponseEntity<>(createdActifs, HttpStatus.CREATED);
     }
-
-    @PreAuthorize("hasRole('DSI')")
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @GetMapping
     public ResponseEntity<List<Actif>> getAllActifs() {
         List<Actif> actifs = actifService.getAllActifs();
         return new ResponseEntity<>(actifs, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('DSI')")
     @GetMapping("/{id}")
     public ResponseEntity<Actif> getActifById(@PathVariable Long id) {
         Actif actif = actifService.getActifById(id);
         return new ResponseEntity<>(actif, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('DSI')")
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PutMapping("/{id}")
     public ResponseEntity<Actif> updateActif(@PathVariable Long id, @RequestBody Actif actif) {
         actif.setId(id);
@@ -52,7 +50,7 @@ public class ActifController {
         return new ResponseEntity<>(updatedActif, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('DSI')")
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
     @PutMapping("/archive/{id}")
     public ResponseEntity<Actif> archiveActif(@PathVariable Long id) {
         Actif archivedActif = actifService.archiveActif(id);
