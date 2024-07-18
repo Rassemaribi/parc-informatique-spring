@@ -88,7 +88,6 @@
             <version>12.6.3.jre11</version>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
