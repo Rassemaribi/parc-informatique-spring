@@ -35,7 +35,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/auth/**", "/api/messages/**", "/api/recommend").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/messages/**").permitAll()
                         .requestMatchers("/chat-websocket/**").permitAll()
                         .anyRequest().authenticated()
                 )
