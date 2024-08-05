@@ -21,8 +21,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id)
-                ;
+        User user = userService.getUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -50,14 +49,6 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserAndUnassignActifs(@PathVariable Long userId) {
         userService.deleteUserAndUnassignActifs(userId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PreAuthorize("hasAuthority(@dsiGroupId)")
-    @PutMapping("/deactivate")
-    public ResponseEntity<Void> deactivateUsers(@RequestBody List<Long> ids) {
-        System.out.println("ids = " + ids);
-        userService.deactivateUsers(ids);
         return ResponseEntity.noContent().build();
     }
 }

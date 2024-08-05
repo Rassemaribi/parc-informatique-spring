@@ -37,17 +37,15 @@ public class UserService {
         String email = authRequest.getEmail();
         List<String> groups = authRequest.getGroups();
 
-        String[] nameParts = authRequest.getName().split(" ", 2);
+        String[] nameParts = authRequest.getName().split(" ");
         String prenom = nameParts[0];
         String nom = nameParts.length > 1 ? nameParts[1] : "";
 
-        UserDto userDto = this.findByEmail(email)
-                ;
+        UserDto userDto = this.findByEmail(email);
         User user;
         if (userDto == null) {
             user = new User();
-            user.setEmail(email)
-            ;
+            user.setEmail(email);
             user.setPrenom(prenom);
             user.setNom(nom);
             user.setUserGroups(groups);
@@ -73,8 +71,6 @@ public class UserService {
         user.setEmail(dto.getEmail());
         user.setNom(dto.getNom());
         user.setPrenom(dto.getPrenom());
-        user.setActive(dto.isActive());
-        user.setPhoneNumber(dto.getPhoneNumber());
         user.setAssignedActifs(dto.getAssignedActifs());
         user.setCreatedActifs(dto.getCreatedActifs());
         user.setDemandesAcquisitionCollaborateur(dto.getDemandesAcquisitionCollaborateur());
@@ -87,16 +83,14 @@ public class UserService {
 
     @Transactional
     public UserDto findByEmail(String email) {
-        Optional<User> userOptional = userRepository.findByEmail(email)
-                ;
+        Optional<User> userOptional = userRepository.findByEmail(email);
         User user;
         if (userOptional.isPresent()) {
             user = userOptional.get();
         } else {
             // Create a new user if a user with the provided email does not exist
             user = new User();
-            user.setEmail(email)
-            ;
+            user.setEmail(email);
             userRepository.save(user);
         }
 
@@ -201,7 +195,7 @@ public class UserService {
 
     @Transactional
     public List<UserDto> getAllUsers() {
-        List<User> users = userRepository.findByActiveTrue();
+        List<User> users = userRepository.findAll();
         return users.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
@@ -211,8 +205,6 @@ public class UserService {
         dto.setEmail(user.getEmail());
         dto.setNom(user.getNom());
         dto.setPrenom(user.getPrenom());
-        dto.setActive(user.isActive());
-        dto.setPhoneNumber(user.getPhoneNumber());
         dto.setAssignedActifs(new ArrayList<>(user.getAssignedActifs()));
         dto.setCreatedActifs(new ArrayList<>(user.getCreatedActifs()));
         dto.setDemandesAcquisitionCollaborateur(new ArrayList<>(user.getDemandesAcquisitionCollaborateur()));
@@ -221,11 +213,6 @@ public class UserService {
         dto.setDemandesReparationDSI(new ArrayList<>(user.getDemandesReparationDSI()));
         dto.setUserGroups(user.getUserGroups());
         return dto;
-    }
-
-    @Transactional
-    public void deactivateUsers(List<Long> ids) {
-        userRepository.deactivateUsers(ids);
     }
 
     @Transactional

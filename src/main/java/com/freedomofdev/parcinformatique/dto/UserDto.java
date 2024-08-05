@@ -13,8 +13,6 @@ public class UserDto {
     private String email;
     private String nom;
     private String prenom;
-    private boolean active;
-    private String phoneNumber;
     private List<Actif> assignedActifs;
     private List<Actif> createdActifs;
     private List<DemandeAcquisition> demandesAcquisitionCollaborateur;
