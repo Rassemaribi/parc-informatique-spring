@@ -1,13 +1,14 @@
 package com.freedomofdev.parcinformatique.entity;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,12 @@ public class User {
 
     @Size(max = 50)
     private String prenom;
+
+    @Column(name = "active", nullable = false, columnDefinition = "boolean default true")
+    private boolean active = true;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "assignedUser")
