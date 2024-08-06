@@ -27,4 +27,10 @@ public class AiController {
         InputPayload savedInputPayload = aiModelService.saveInputCriteria(inputPayload);
         return new ResponseEntity<>(savedInputPayload, HttpStatus.CREATED);
     }
+
+    @GetMapping("/inputCriteria/{id}")
+    public ResponseEntity<InputPayload> getInputCriteria(@PathVariable Long id) {
+        InputPayload inputPayload = aiModelService.getInputCriteria(id);
+        return new ResponseEntity<>(inputPayload, HttpStatus.OK);
+    }
 }

@@ -6,6 +6,7 @@ import com.freedomofdev.parcinformatique.entity.AiModelResponse;
 import com.freedomofdev.parcinformatique.entity.InputPayload;
 import com.freedomofdev.parcinformatique.entity.ProductRecommendation;
 import com.freedomofdev.parcinformatique.entity.Recommendation;
+import com.freedomofdev.parcinformatique.exception.ResourceNotFoundException;
 import com.freedomofdev.parcinformatique.repository.InputPayloadRepository;
 import com.freedomofdev.parcinformatique.repository.ProductRecommendationRepository;
 import com.freedomofdev.parcinformatique.repository.RecommendationRepository;
@@ -92,5 +93,10 @@ public class AiModelService {
 
     public InputPayload saveInputCriteria(InputPayload inputPayload) {
         return inputPayloadRepository.save(inputPayload);
+    }
+
+    public InputPayload getInputCriteria(Long id) {
+        return inputPayloadRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("InputPayload", "id", id));
     }
 }
