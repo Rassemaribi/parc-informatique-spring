@@ -41,7 +41,7 @@ public class User {
     @Size(max = 50)
     private String prenom;
 
-    @Column(name = "active", nullable = false, columnDefinition = "boolean default true")
+    @Column(name = "active", nullable = false, columnDefinition = "bit default 1")
     private boolean active = true;
 
     @Column(name = "phone_number")
