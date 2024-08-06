@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 
 @CrossOrigin(origins = "https://parcinformatiquefodservicess.azurewebsites.net", maxAge = 3600, allowCredentials = "true") // Adjust the origins to match your Angular app's URL
@@ -28,9 +31,15 @@ public class AiController {
         return new ResponseEntity<>(savedInputPayload, HttpStatus.CREATED);
     }
 
-    @GetMapping("/inputCriteria/{id}")
-    public ResponseEntity<InputPayload> getInputCriteria(@PathVariable Long id) {
+    @GetMapping("/recommendAndInputCriteria/{id}")
+    public ResponseEntity<Map<String, Object>> getRecommendAndInputCriteria(@PathVariable Long id) {
         InputPayload inputPayload = aiModelService.getInputCriteria(id);
-        return new ResponseEntity<>(inputPayload, HttpStatus.OK);
+        String recommendations = aiModelService.getRecommendations(inputPayload).toString();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("recommendations", recommendations);
+        response.put("inputCriteria", inputPayload);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
