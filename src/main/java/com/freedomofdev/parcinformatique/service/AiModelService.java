@@ -88,7 +88,7 @@ public class AiModelService {
     }
     private String generateUrlFromPayload(InputPayload payload) {
         // Implement this method to generate the AI model URL based on the InputPayload
-        return "https://upright-vast-stallion.ngrok-free.app/recommend"; // Replace with actual implementation
+        return "https://dockercontainerdeploy-dhgqhef8fsfhbfdv.eastus-01.azurewebsites.net/recommend"; // Replace with actual implementation
     }
 
     public InputPayload saveInputCriteria(InputPayload inputPayload) {
