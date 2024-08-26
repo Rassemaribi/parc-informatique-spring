@@ -10,16 +10,22 @@ import com.freedomofdev.parcinformatique.exception.ResourceNotFoundException;
 import com.freedomofdev.parcinformatique.repository.InputPayloadRepository;
 import com.freedomofdev.parcinformatique.repository.ProductRecommendationRepository;
 import com.freedomofdev.parcinformatique.repository.RecommendationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 @Service
 public class AiModelService {
 
+    private static final Logger logger = LoggerFactory.getLogger(AiModelService.class);
 
     @Autowired
     private ProductRecommendationRepository productRecommendationRepository;
@@ -30,54 +36,51 @@ public class AiModelService {
     @Autowired
     private InputPayloadRepository inputPayloadRepository;
 
-
+    @Cacheable(value = "recommendationsCache", key = "#payload.hashCode()")
     public AiModelResponse getRecommendations(InputPayload payload) {
+        logger.info("getRecommendations called with payload: {}", payload);
+
+        List<InputPayload> allInputPayloads = inputPayloadRepository.findAll();
+        InputPayload lastInputPayload = allInputPayloads.isEmpty() ? null : allInputPayloads.get(allInputPayloads.size() - 1);
+
+        if (lastInputPayload != null && payload.equals(lastInputPayload)) {
+            logger.info("InputPayload is the same as the last one, skipping save to database.");
+            throw new RuntimeException("Duplicate input - Skipping saving to the database and cache.");
+        }
+
         String aiModelUrl = generateUrlFromPayload(payload);
-
         RestTemplate restTemplate = new RestTemplate();
-
-        // Create HttpEntity with InputPayload as body
         HttpEntity<InputPayload> entity = new HttpEntity<>(payload);
 
-        // Call the AI model and get the response
+        long startTime = System.currentTimeMillis();
         ResponseEntity<String> response = restTemplate.exchange(aiModelUrl, HttpMethod.POST, entity, String.class);
+        long endTime = System.currentTimeMillis();
+        logger.info("Time taken for getRecommendations: {} ms", (endTime - startTime));
 
         if (response.getStatusCode().is2xxSuccessful()) {
             try {
-                // Parse response to AiModelResponse
                 ObjectMapper mapper = new ObjectMapper();
                 AiModelResponse aiModelResponse = mapper.readValue(response.getBody(), AiModelResponse.class);
 
-                // Extract the predictedReview value from the AiModelResponse object
                 double predictedReview = aiModelResponse.getInputCriteria().getPredictedReview();
-
-                // Set the predictedReview value to the InputPayload object
                 payload.setPredictedReview(predictedReview);
 
-                // Create a new Recommendation
                 Recommendation recommendation = new Recommendation();
-
-                // Set the Recommendation to the InputPayload
                 payload.setRecommendation(recommendation);
-
-                // Set the InputPayload to the Recommendation
                 recommendation.setInputCriteria(payload);
 
-                // Save the InputPayload to the database
                 payload = inputPayloadRepository.save(payload);
-
-                // Save the Recommendation to the database
                 recommendationRepository.save(recommendation);
 
-                // Set the Recommendation for each ProductRecommendation and save them to the database
                 for (ProductRecommendation productRecommendation : aiModelResponse.getRecommendedLaptops()) {
                     productRecommendation.setRecommendation(recommendation);
                     productRecommendationRepository.save(productRecommendation);
                 }
 
+                logger.info("getRecommendations returning data: {}", aiModelResponse);
                 return aiModelResponse;
+
             } catch (JsonProcessingException e) {
-                // Handle the exception
                 e.printStackTrace();
             }
         } else {
@@ -86,17 +89,36 @@ public class AiModelService {
 
         return null;
     }
+
     private String generateUrlFromPayload(InputPayload payload) {
-        // Implement this method to generate the AI model URL based on the InputPayload
-        return "https://dockercontainerdeploy-dhgqhef8fsfhbfdv.eastus-01.azurewebsites.net/recommend"; // Replace with actual implementation
+        return "https://dockercontainerdeploy-dhgqhef8fsfhbfdv.eastus-01.azurewebsites.net/recommend";
     }
 
+    @Cacheable(value = "inputCriteriaCache", key = "#inputPayload.hashCode()")
     public InputPayload saveInputCriteria(InputPayload inputPayload) {
-        return inputPayloadRepository.save(inputPayload);
+        logger.info("saveInputCriteria called with inputPayload: {}", inputPayload);
+
+        List<InputPayload> allInputPayloads = inputPayloadRepository.findAll();
+        InputPayload lastInputPayload = allInputPayloads.isEmpty() ? null : allInputPayloads.get(allInputPayloads.size() - 1);
+
+        if (lastInputPayload != null && inputPayload.equals(lastInputPayload)) {
+            logger.info("InputPayload is the same as the last one, skipping save to database.");
+            return lastInputPayload;
+        }
+
+        long startTime = System.currentTimeMillis();
+        inputPayload = inputPayloadRepository.save(inputPayload);
+        long endTime = System.currentTimeMillis();
+        logger.info("Time taken for saveInputCriteria: {} ms", (endTime - startTime));
+
+        logger.info("saveInputCriteria returning data: {}", inputPayload);
+        return inputPayload;
     }
 
     public InputPayload getInputCriteria(Long id) {
         return inputPayloadRepository.findById(id)
+
                 .orElseThrow(() -> new ResourceNotFoundException("InputPayload", "id", id));
     }
 }
+
