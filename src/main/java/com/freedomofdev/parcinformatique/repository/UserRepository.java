@@ -27,7 +27,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "createdActifs.demandesReparation", // Eagerly fetch the demandesReparation collection of the createdActifs
             "assignedActifs",
             "assignedActifs.demandesReparation", // Eagerly fetch the demandesReparation collection of the assignedActifs
-            "userGroups"
+            "userGroups",
+            "assignedAbonnements",
     })
     Optional<User> findById(Long id);
 
