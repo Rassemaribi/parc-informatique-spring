@@ -6,12 +6,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
 @Entity(name = "actifs")
 @Data
 @NoArgsConstructor
@@ -60,7 +61,7 @@ public class Actif {
     private User createdByDSI;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "actif", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "actif", fetch = FetchType.EAGER)
     private List<DemandeReparation> demandesReparation = new ArrayList<>();
 
     @Override

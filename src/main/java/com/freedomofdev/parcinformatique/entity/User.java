@@ -41,7 +41,7 @@ public class User {
     @Size(max = 50)
     private String prenom;
 
-    @Column(name = "active", nullable = false, columnDefinition = "bit default 1")
+    @Column(name = "active", nullable = false, columnDefinition = "boolean default true")
     private boolean active = true;
 
     @Column(name = "phone_number")
@@ -50,6 +50,10 @@ public class User {
     @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "assignedUser")
     private List<Actif> assignedActifs = new ArrayList<>();
+
+    @JsonIdentityReference(alwaysAsId = true)
+    @OneToMany(mappedBy = "assignedUser")
+    private List<Abonnement> assignedAbonnements = new ArrayList<>();
 
     @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "createdByDSI")

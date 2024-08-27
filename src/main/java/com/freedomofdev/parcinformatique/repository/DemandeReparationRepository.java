@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -21,4 +22,6 @@ public interface DemandeReparationRepository extends JpaRepository<DemandeRepara
 
     @Query("SELECT dr.actif.reference, COUNT(dr) FROM demandes_reparation dr GROUP BY dr.actif.reference")
     List<Object[]> getTotalCountByActifReference();
+
+    List<DemandeReparation> findAllByDateRequestBefore(Date date);
 }

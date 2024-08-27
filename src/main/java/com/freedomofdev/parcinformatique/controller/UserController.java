@@ -19,10 +19,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id)
-                ;
+        User user = userService.getUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -58,6 +58,20 @@ public class UserController {
     public ResponseEntity<Void> deactivateUsers(@RequestBody List<Long> ids) {
         System.out.println("ids = " + ids);
         userService.deactivateUsers(ids);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
+    @PostMapping("/{userId}/assignAbonnement/{abonnementId}")
+    public ResponseEntity<?> assignAbonnementToUser(@PathVariable Long userId, @PathVariable Long abonnementId) {
+        userService.assignAbonnementToUser(userId, abonnementId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasAuthority(@dsiGroupId)")
+    @DeleteMapping("/{userId}/removeAbonnement/{abonnementId}")
+    public ResponseEntity<?> removeAbonnementFromUser(@PathVariable Long userId, @PathVariable Long abonnementId) {
+        userService.removeAbonnementFromUser(userId, abonnementId);
         return ResponseEntity.noContent().build();
     }
 }

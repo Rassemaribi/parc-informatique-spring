@@ -2,11 +2,9 @@ package com.freedomofdev.parcinformatique.service;
 
 import com.freedomofdev.parcinformatique.dto.AuthRequest;
 import com.freedomofdev.parcinformatique.dto.UserDto;
-import com.freedomofdev.parcinformatique.entity.Actif;
-import com.freedomofdev.parcinformatique.entity.DemandeAcquisition;
-import com.freedomofdev.parcinformatique.entity.DemandeReparation;
-import com.freedomofdev.parcinformatique.entity.User;
+import com.freedomofdev.parcinformatique.entity.*;
 import com.freedomofdev.parcinformatique.enums.Etat;
+import com.freedomofdev.parcinformatique.repository.AbonnementRepository;
 import com.freedomofdev.parcinformatique.repository.ActifRepository;
 import com.freedomofdev.parcinformatique.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
+
+    @Autowired
+    private AbonnementRepository abonnementRepository;
+
     @Autowired
     UserRepository userRepository;
 
@@ -41,13 +43,11 @@ public class UserService {
         String prenom = nameParts[0];
         String nom = nameParts.length > 1 ? nameParts[1] : "";
 
-        UserDto userDto = this.findByEmail(email)
-                ;
+        UserDto userDto = this.findByEmail(email);
         User user;
         if (userDto == null) {
             user = new User();
-            user.setEmail(email)
-            ;
+            user.setEmail(email);
             user.setPrenom(prenom);
             user.setNom(nom);
             user.setUserGroups(groups);
@@ -87,16 +87,14 @@ public class UserService {
 
     @Transactional
     public UserDto findByEmail(String email) {
-        Optional<User> userOptional = userRepository.findByEmail(email)
-                ;
+        Optional<User> userOptional = userRepository.findByEmail(email);
         User user;
         if (userOptional.isPresent()) {
             user = userOptional.get();
         } else {
             // Create a new user if a user with the provided email does not exist
             user = new User();
-            user.setEmail(email)
-            ;
+            user.setEmail(email);
             userRepository.save(user);
         }
 
@@ -239,5 +237,45 @@ public class UserService {
             actifRepository.save(actif);
         }
         userRepository.delete(user);
+    }
+
+    @Transactional
+    public void assignAbonnementToUser(Long userId, Long abonnementId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        Abonnement abonnement = abonnementRepository.findById(abonnementId)
+                .orElseThrow(() -> new RuntimeException("Abonnement non trouvé."));
+
+        // Check if the Abonnement is already assigned to a user
+        User oldUser = abonnement.getAssignedUser();
+        if (oldUser != null) {
+            oldUser.getAssignedAbonnements().remove(abonnement);
+            userRepository.save(oldUser);
+        }
+
+        user.getAssignedAbonnements().add(abonnement);
+        abonnement.setAssignedUser(user);
+
+        // Save the new user and the Abonnement to the database
+        userRepository.save(user);
+        abonnementRepository.save(abonnement);
+    }
+
+    @Transactional
+    public void removeAbonnementFromUser(Long userId, Long abonnementId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Erreur."));
+        Abonnement abonnement = abonnementRepository.findById(abonnementId)
+                .orElseThrow(() -> new RuntimeException("Error: Abonnement is not found."));
+
+        if (!user.getAssignedAbonnements().contains(abonnement)) {
+            throw new RuntimeException("Error: Abonnement is not assigned to this user.");
+        }
+
+        user.getAssignedAbonnements().remove(abonnement);
+        abonnement.setAssignedUser(null);
+
+        userRepository.save(user);
+        abonnementRepository.save(abonnement);
     }
 }

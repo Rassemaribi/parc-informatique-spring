@@ -1,5 +1,6 @@
 package com.freedomofdev.parcinformatique.dto;
 
+import com.freedomofdev.parcinformatique.entity.Abonnement;
 import com.freedomofdev.parcinformatique.entity.Actif;
 import com.freedomofdev.parcinformatique.entity.DemandeAcquisition;
 import com.freedomofdev.parcinformatique.entity.DemandeReparation;
@@ -17,6 +18,7 @@ public class UserDto {
     private String phoneNumber;
     private List<Actif> assignedActifs;
     private List<Actif> createdActifs;
+    private List<Abonnement> assignedAbonnements;
     private List<DemandeAcquisition> demandesAcquisitionCollaborateur;
     private List<DemandeAcquisition> demandesAcquisitionDSI;
     private List<DemandeReparation> demandesReparationCollaborateur;
