@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "https://parcinformatiquefodservicess.azurewebsites.net", maxAge = 3600, allowCredentials = "true")// Adjust the origins to match your Angular app's URL
+@CrossOrigin(origins = "https://parcinformatiquefodservicesss-bgf0bhhae7e4b7am.eastus-01.azurewebsites.net", maxAge = 3600, allowCredentials = "true")// Adjust the origins to match your Angular app's URL
 @RequestMapping("/api")
 public class AiController {
 
