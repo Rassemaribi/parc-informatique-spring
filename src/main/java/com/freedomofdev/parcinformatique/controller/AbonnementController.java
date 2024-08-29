@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "https://parcinformatiquefodservicess.azurewebsites.net", maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = "https://parcinformatiquefodservicesss.azurewebsites.net", maxAge = 3600, allowCredentials = "true")
 @RequestMapping("/api/abonnements")
 public class AbonnementController {
 

@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin(origins = "https://parcinformatiquefodservicess.azurewebsites.net", maxAge = 3600, allowCredentials = "true")
+@CrossOrigin(origins = "https://parcinformatiquefodservicesss.azurewebsites.net", maxAge = 3600, allowCredentials = "true")
 @RequestMapping("/api/users")
 public class UserController {
     @Autowired
