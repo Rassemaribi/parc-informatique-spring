@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
 
-        registry.addEndpoint("/chat-websocket").setAllowedOrigins("https://parcinformatiquefodservicess.azurewebsites.net/").withSockJS();
+        registry.addEndpoint("/chat-websocket").setAllowedOrigins("https://parcinformatiquefodservicesss-bgf0bhhae7e4b7am.eastus-01.azurewebsites.net/").withSockJS();
 
     }
 
